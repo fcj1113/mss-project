@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miaoshasha.logcenter.mapper.GatewayLogMapper">
+
+    <sql id="Base_Column_List">
+    log_id, user_id,create_time, ip_addr, user_agent, request_uri, method,params,duration,error
+  </sql>
+
+
+    <insert id="insert" parameterType="com.miaoshasha.common.entity.system.SysLog">
+    insert into log_gateway ( log_id, user_id, create_time, ip_addr, user_agent,request_uri, method,params,duration,error)
+    values ( #{logId}, #{userId},#{createTime}, #{ipAddr} ,#{userAgent} ,#{requestUri} ,#{method} ,#{params},#{duration} ,#{error} )
+  </insert>
+
+</mapper>

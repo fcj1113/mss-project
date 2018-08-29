@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miaoshasha.gateway.mapper.ZuulRouteMapper">
+    <resultMap id="BaseResultMap" type="com.miaoshasha.gateway.entity.ZuulRouteEntity">
+
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+        <result column="service_id" jdbcType="VARCHAR" property="serviceId"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="strip_prefix" jdbcType="TINYINT" property="stripPrefix"/>
+        <result column="retryable" jdbcType="TINYINT" property="retryable"/>
+        <result column="sensitive_headers" jdbcType="VARCHAR" property="sensitiveHeaders"/>
+        <result column="custom_sensitive_headers" jdbcType="TINYINT" property="customSensitiveHeaders"/>
+        <result column="enabled" jdbcType="TINYINT" property="enabled"/>
+        <result column="route_name" jdbcType="VARCHAR" property="routeName"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, path, service_id, url, strip_prefix, retryable, sensitive_headers, custom_sensitive_headers,
+    enabled, route_name
+  </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+
+        select
+        <include refid="Base_Column_List"/>
+        from base_zuul_route
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+
+    delete from base_zuul_route
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+    <insert id="insert" parameterType="com.miaoshasha.gateway.entity.ZuulRouteEntity" useGeneratedKeys="true" keyProperty="id">
+
+    insert into base_zuul_route ( path, service_id,
+      url, strip_prefix, retryable, 
+      sensitive_headers, custom_sensitive_headers, enabled, 
+      route_name)
+    values (#{path,jdbcType=VARCHAR}, #{serviceId,jdbcType=VARCHAR},
+      #{url,jdbcType=VARCHAR}, #{stripPrefix,jdbcType=TINYINT}, #{retryable,jdbcType=TINYINT},
+      #{sensitiveHeaders,jdbcType=VARCHAR}, #{customSensitiveHeaders,jdbcType=TINYINT}, #{enabled,jdbcType=TINYINT},
+      #{routeName,jdbcType=VARCHAR})
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.miaoshasha.gateway.entity.ZuulRouteEntity" useGeneratedKeys="true" keyProperty="id">
+
+        insert into base_zuul_route
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="path != null">
+                path,
+            </if>
+            <if test="serviceId != null">
+                service_id,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="stripPrefix != null">
+                strip_prefix,
+            </if>
+            <if test="retryable != null">
+                retryable,
+            </if>
+            <if test="sensitiveHeaders != null">
+                sensitive_headers,
+            </if>
+            <if test="customSensitiveHeaders != null">
+                custom_sensitive_headers,
+            </if>
+            <if test="enabled != null">
+                enabled,
+            </if>
+            <if test="routeName != null">
+                route_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="path != null">
+                #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceId != null">
+                #{serviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="stripPrefix != null">
+                #{stripPrefix,jdbcType=TINYINT},
+            </if>
+            <if test="retryable != null">
+                #{retryable,jdbcType=TINYINT},
+            </if>
+            <if test="sensitiveHeaders != null">
+                #{sensitiveHeaders,jdbcType=VARCHAR},
+            </if>
+            <if test="customSensitiveHeaders != null">
+                #{customSensitiveHeaders,jdbcType=TINYINT},
+            </if>
+            <if test="enabled != null">
+                #{enabled,jdbcType=TINYINT},
+            </if>
+            <if test="routeName != null">
+                #{routeName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.miaoshasha.gateway.entity.ZuulRouteEntity">
+
+        update base_zuul_route
+        <set>
+            <if test="path != null">
+                path = #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="serviceId != null">
+                service_id = #{serviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="stripPrefix != null">
+                strip_prefix = #{stripPrefix,jdbcType=TINYINT},
+            </if>
+            <if test="retryable != null">
+                retryable = #{retryable,jdbcType=TINYINT},
+            </if>
+            <if test="sensitiveHeaders != null">
+                sensitive_headers = #{sensitiveHeaders,jdbcType=VARCHAR},
+            </if>
+            <if test="customSensitiveHeaders != null">
+                custom_sensitive_headers = #{customSensitiveHeaders,jdbcType=TINYINT},
+            </if>
+            <if test="enabled != null">
+                enabled = #{enabled,jdbcType=TINYINT},
+            </if>
+            <if test="routeName != null">
+                route_name = #{routeName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.miaoshasha.gateway.entity.ZuulRouteEntity">
+
+    update base_zuul_route
+    set path = #{path,jdbcType=VARCHAR},
+      service_id = #{serviceId,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      strip_prefix = #{stripPrefix,jdbcType=TINYINT},
+      retryable = #{retryable,jdbcType=TINYINT},
+      sensitive_headers = #{sensitiveHeaders,jdbcType=VARCHAR},
+      custom_sensitive_headers = #{customSensitiveHeaders,jdbcType=TINYINT},
+      enabled = #{enabled,jdbcType=TINYINT},
+      route_name = #{routeName,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+    <select id="selectAll" resultType="com.miaoshasha.gateway.entity.ZuulRouteEntity" parameterType="com.miaoshasha.gateway.entity.ZuulRouteEntity">
+        select
+        <include refid="Base_Column_List"/>
+        from base_zuul_route
+            <where>
+                <if test="path != null and path != '' ">
+                    AND path = #{path}
+                </if>
+                <if test="serviceId != null and serviceId!=''">
+                    AND service_id = #{serviceId}
+                </if>
+                <if test="enabled != null ">
+                    AND enabled = #{enabled}
+                </if>
+                <if test="routeName != null and routeName != '' ">
+                    AND route_name = #{routeName}
+                </if>
+            </where>
+    </select>
+</mapper>

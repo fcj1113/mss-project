@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miaoshasha.logcenter.mapper.LogMapper">
+
+    <sql id="Base_Column_List">
+    log_id, user_id, user_name, op_time, ip_address, op_type, history_result,last_result,notes,func_code,func_name
+  </sql>
+
+
+    <insert id="insert" parameterType="com.miaoshasha.common.bean.OpLog">
+    insert into log_operation ( log_id, user_id, user_name, op_time, ip_address, op_type, history_result,last_result,notes,func_code,func_name)
+    values ( #{logId}, #{userId},#{userName}, #{opTime}, #{ipAddress},#{opType},#{historyResult}, #{lastResult}, #{notes}, #{funcCode}, #{funcName})
+  </insert>
+
+</mapper>

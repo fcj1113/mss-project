@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miaoshasha.base.mapper.permission.PermissionResourceMapper">
+
+  <resultMap id="BaseResultMap" type="com.miaoshasha.common.entity.permission.PermissionResource">
+    <id column="res_id" jdbcType="BIGINT" property="resId" />
+    <result column="res_code" jdbcType="VARCHAR" property="resCode" />
+    <result column="res_name" jdbcType="VARCHAR" property="resName" />
+    <result column="res_type" jdbcType="INTEGER" property="resType" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="res_icon" jdbcType="VARCHAR" property="resIcon" />
+    <result column="entry_path" jdbcType="VARCHAR" property="entryPath" />
+    <result column="seq_no" jdbcType="INTEGER" property="seqNo" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="is_show" jdbcType="TINYINT" property="isShow" />
+    <result column="node_type" jdbcType="INTEGER" property="nodeType" />
+    <result column="notes" jdbcType="VARCHAR" property="notes" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    res_id, res_code, res_name, res_type, parent_id, res_icon, entry_path, seq_no, state,
+    is_show, node_type, notes, create_time, create_user, update_time, update_user
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_permission_resource
+    where res_id = #{resId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from base_permission_resource
+    where res_id = #{resId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.miaoshasha.common.entity.permission.PermissionResource">
+    insert into base_permission_resource (res_id, res_code, res_name, 
+      res_type, parent_id, res_icon, 
+      entry_path, seq_no, state, 
+      is_show, node_type, notes, 
+      create_time, create_user, update_time, 
+      update_user)
+    values (#{resId,jdbcType=BIGINT}, #{resCode,jdbcType=VARCHAR}, #{resName,jdbcType=VARCHAR},
+      #{resType,jdbcType=INTEGER}, #{parentId,jdbcType=BIGINT}, #{resIcon,jdbcType=VARCHAR},
+      #{entryPath,jdbcType=VARCHAR}, #{seqNo,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, 
+      #{isShow,jdbcType=TINYINT}, #{nodeType,jdbcType=INTEGER}, #{notes,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=BIGINT})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.miaoshasha.common.entity.permission.PermissionResource">
+    insert into base_permission_resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="resId != null">
+        res_id,
+      </if>
+      <if test="resCode != null">
+        res_code,
+      </if>
+      <if test="resName != null">
+        res_name,
+      </if>
+      <if test="resType != null">
+        res_type,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="resIcon != null">
+        res_icon,
+      </if>
+      <if test="entryPath != null">
+        entry_path,
+      </if>
+      <if test="seqNo != null">
+        seq_no,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="isShow != null">
+        is_show,
+      </if>
+      <if test="nodeType != null">
+        node_type,
+      </if>
+      <if test="notes != null">
+        notes,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="resId != null">
+        #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resCode != null">
+        #{resCode,jdbcType=VARCHAR},
+      </if>
+      <if test="resName != null">
+        #{resName,jdbcType=VARCHAR},
+      </if>
+      <if test="resType != null">
+        #{resType,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="resIcon != null">
+        #{resIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="entryPath != null">
+        #{entryPath,jdbcType=VARCHAR},
+      </if>
+      <if test="seqNo != null">
+        #{seqNo,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="isShow != null">
+        #{isShow,jdbcType=TINYINT},
+      </if>
+      <if test="nodeType != null">
+        #{nodeType,jdbcType=INTEGER},
+      </if>
+      <if test="notes != null">
+        #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.miaoshasha.common.entity.permission.PermissionResource">
+
+    update base_permission_resource
+    <set>
+      <if test="resCode != null">
+        res_code = #{resCode,jdbcType=VARCHAR},
+      </if>
+      <if test="resName != null">
+        res_name = #{resName,jdbcType=VARCHAR},
+      </if>
+      <if test="resType != null">
+        res_type = #{resType,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="resIcon != null">
+        res_icon = #{resIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="entryPath != null">
+        entry_path = #{entryPath,jdbcType=VARCHAR},
+      </if>
+      <if test="seqNo != null">
+        seq_no = #{seqNo,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="isShow != null">
+        is_show = #{isShow,jdbcType=TINYINT},
+      </if>
+      <if test="nodeType != null">
+        node_type = #{nodeType,jdbcType=INTEGER},
+      </if>
+      <if test="notes != null">
+        notes = #{notes,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where res_id = #{resId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.miaoshasha.common.entity.permission.PermissionResource">
+    update base_permission_resource
+    set res_code = #{resCode,jdbcType=VARCHAR},
+      res_name = #{resName,jdbcType=VARCHAR},
+      res_type = #{resType,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      res_icon = #{resIcon,jdbcType=VARCHAR},
+      entry_path = #{entryPath,jdbcType=VARCHAR},
+      seq_no = #{seqNo,jdbcType=INTEGER},
+      state = #{state,jdbcType=INTEGER},
+      is_show = #{isShow,jdbcType=TINYINT},
+      node_type = #{nodeType,jdbcType=INTEGER},
+      notes = #{notes,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where res_id = #{resId,jdbcType=INTEGER}
+  </update>
+
+  <select id="findByRole" resultType="com.miaoshasha.common.entity.permission.PermissionResource" >
+     SELECT a.res_id, a.res_code, a.res_name, a.res_type, a.parent_id, a.res_icon, a.entry_path, a.seq_no, a.state,
+     a.is_show, a.node_type, a.notes, a.create_time, a.create_user, a.update_time, a.update_user
+     FROM base_permission_resource a,base_permission_role b WHERE a.res_id = b.res_id AND b.role_id=#{roleId}
+     <if test="resType != null and resType != '' " >
+       AND a.res_type = #{resType}
+     </if>
+  </select>
+
+
+</mapper>

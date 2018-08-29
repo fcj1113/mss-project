@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miaoshasha.base.mapper.permission.PermissionRoleMapper">
+  <resultMap id="BaseResultMap" type="com.miaoshasha.common.entity.permission.PermissionRole">
+
+    <id column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="role_id" jdbcType="BIGINT" property="roleId" />
+    <result column="res_id" jdbcType="BIGINT" property="resId" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    pid, role_id, res_id
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from base_permission_role
+    where pid = #{pid,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from base_permission_role
+    where pid = #{pid,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.miaoshasha.common.entity.permission.PermissionRole">
+    insert into base_permission_role (pid, role_id, res_id
+      )
+    values (#{pid,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{resId,jdbcType=BIGINT}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.miaoshasha.common.entity.permission.PermissionRole">
+    insert into base_permission_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="resId != null">
+        res_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="resId != null">
+        #{resId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.miaoshasha.common.entity.permission.PermissionRole">
+    update base_permission_role
+    <set>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="resId != null">
+        res_id = #{resId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.miaoshasha.common.entity.permission.PermissionRole">
+    update base_permission_role
+    set role_id = #{roleId,jdbcType=BIGINT},
+      res_id = #{resId,jdbcType=BIGINT}
+    where pid = #{pid,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miaoshasha.base.mapper.user.UserMapper">
+  <resultMap id="BaseResultMap" type="com.miaoshasha.common.entity.user.User">
+
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="login_type" jdbcType="INTEGER" property="loginType" />
+    <result column="user_phone" jdbcType="VARCHAR" property="userPhone" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="effective_date" jdbcType="DATE" property="effectiveDate" />
+    <result column="expire_date" jdbcType="DATE" property="expireDate" />
+    <result column="reg_channel" jdbcType="INTEGER" property="regChannel" />
+    <result column="last_login" jdbcType="TIMESTAMP" property="lastLogin" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="lock_state" jdbcType="TINYINT" property="lockState" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+
+    user_id, login_type, user_phone, user_name, email, nickname, password, effective_date, 
+    expire_date, reg_channel, last_login, state, lock_state, create_time, create_user, 
+    update_time, update_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+
+    select 
+    <include refid="Base_Column_List" />
+    from base_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+
+    delete from base_user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.miaoshasha.common.entity.user.User">
+
+    insert into base_user (user_id, login_type, user_phone, 
+      user_name, email, nickname, 
+      password, effective_date, expire_date, 
+      reg_channel, last_login, state, 
+      lock_state, create_time, create_user, 
+      update_time, update_user)
+    values (#{userId,jdbcType=BIGINT}, #{loginType,jdbcType=INTEGER}, #{userPhone,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{effectiveDate,jdbcType=DATE}, #{expireDate,jdbcType=DATE}, 
+      #{regChannel,jdbcType=INTEGER}, #{lastLogin,jdbcType=TIMESTAMP}, #{state,jdbcType=INTEGER}, 
+      #{lockState,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.miaoshasha.common.entity.user.User">
+
+    insert into base_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="loginType != null">
+        login_type,
+      </if>
+      <if test="userPhone != null">
+        user_phone,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="effectiveDate != null">
+        effective_date,
+      </if>
+      <if test="expireDate != null">
+        expire_date,
+      </if>
+      <if test="regChannel != null">
+        reg_channel,
+      </if>
+      <if test="lastLogin != null">
+        last_login,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="lockState != null">
+        lock_state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="loginType != null">
+        #{loginType,jdbcType=INTEGER},
+      </if>
+      <if test="userPhone != null">
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="effectiveDate != null">
+        #{effectiveDate,jdbcType=DATE},
+      </if>
+      <if test="expireDate != null">
+        #{expireDate,jdbcType=DATE},
+      </if>
+      <if test="regChannel != null">
+        #{regChannel,jdbcType=INTEGER},
+      </if>
+      <if test="lastLogin != null">
+        #{lastLogin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="lockState != null">
+        #{lockState,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.miaoshasha.common.entity.user.User">
+
+    update base_user
+    <set>
+      <if test="loginType != null">
+        login_type = #{loginType,jdbcType=INTEGER},
+      </if>
+      <if test="userPhone != null">
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="effectiveDate != null">
+        effective_date = #{effectiveDate,jdbcType=DATE},
+      </if>
+      <if test="expireDate != null">
+        expire_date = #{expireDate,jdbcType=DATE},
+      </if>
+      <if test="regChannel != null">
+        reg_channel = #{regChannel,jdbcType=INTEGER},
+      </if>
+      <if test="lastLogin != null">
+        last_login = #{lastLogin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="lockState != null">
+        lock_state = #{lockState,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.miaoshasha.common.entity.user.User">
+
+    update base_user
+    set login_type = #{loginType,jdbcType=INTEGER},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      effective_date = #{effectiveDate,jdbcType=DATE},
+      expire_date = #{expireDate,jdbcType=DATE},
+      reg_channel = #{regChannel,jdbcType=INTEGER},
+      last_login = #{lastLogin,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      lock_state = #{lockState,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <select id="getLoginUser" resultType="com.miaoshasha.common.entity.user.User">
+    select
+    <include refid="Base_Column_List"/>
+    FROM base_user
+    <where>
+      <if test="loginType == 1">
+        user_phone=#{loginNo}
+      </if>
+      <if test="loginType == 2">
+        user_name = #{loginNo}
+      </if>
+      <if test="loginType == 3">
+        email = #{loginNo}
+      </if>
+      and reg_channel = #{regChannel} and state != -1
+    </where>
+  </select>
+
+
+</mapper>

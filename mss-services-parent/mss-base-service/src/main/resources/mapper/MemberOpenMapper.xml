@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.miaoshasha.base.mapper.member.MemberOpenMapper">
+  <resultMap id="BaseResultMap" type="com.miaoshasha.common.entity.member.MemberOpen">
+
+    <id column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="device_id" jdbcType="VARCHAR" property="deviceId" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user" jdbcType="BIGINT" property="createUser" />
+  </resultMap>
+  <sql id="Base_Column_List">
+
+    pid, member_id, open_id, device_id, state, create_time, create_user
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+
+    select 
+    <include refid="Base_Column_List" />
+    from base_member_open
+    where pid = #{pid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+
+    delete from base_member_open
+    where pid = #{pid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.miaoshasha.common.entity.member.MemberOpen">
+
+    insert into base_member_open (pid, member_id, open_id, 
+      device_id, state, create_time, 
+      create_user)
+    values (#{pid,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT}, #{openId,jdbcType=VARCHAR}, 
+      #{deviceId,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.miaoshasha.common.entity.member.MemberOpen">
+
+    insert into base_member_open
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="openId != null">
+        open_id,
+      </if>
+      <if test="deviceId != null">
+        device_id,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pid != null">
+        #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.miaoshasha.common.entity.member.MemberOpen">
+
+    update base_member_open
+    <set>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="openId != null">
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceId != null">
+        device_id = #{deviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where pid = #{pid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.miaoshasha.common.entity.member.MemberOpen">
+    update base_member_open
+    set member_id = #{memberId,jdbcType=BIGINT},
+      open_id = #{openId,jdbcType=VARCHAR},
+      device_id = #{deviceId,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT}
+    where pid = #{pid,jdbcType=BIGINT}
+  </update>
+</mapper>
