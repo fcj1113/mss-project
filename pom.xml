@@ -15,11 +15,12 @@
         <module>mss-starters-parent</module>
         <module>mss-services-parent</module>
         <module>mss-ui</module>
+        <module>mss-services-admin-parent</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.13.RELEASE</version>
+        <version>1.5.15.RELEASE</version>
         <relativePath/> <!-- lookup parent from rep ository -->
     </parent>
 
@@ -38,6 +39,8 @@
         <ratelimit.version>1.5.0.RELEASE</ratelimit.version>
         <jjwt.version>0.9.0</jjwt.version>
         <protobuf.version>3.5.1</protobuf.version>
+        <hutool.version>4.1.1</hutool.version>
+        <spring-boot-admin.version>1.5.7</spring-boot-admin.version>
     </properties>
 
     <!--公共依赖-->
@@ -59,11 +62,6 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
-        <!-- redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
 
         <!--配置文件处理器
         <dependency>
@@ -96,7 +94,18 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>4.1.1</version>
+            <version>${hutool.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+
+        <!--监控-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
     </dependencies>
@@ -169,6 +178,15 @@
                 <artifactId>protobuf-java</artifactId>
                 <version>${protobuf.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>de.codecentric</groupId>
+                <artifactId>spring-boot-admin-dependencies</artifactId>
+                <version>${spring-boot-admin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

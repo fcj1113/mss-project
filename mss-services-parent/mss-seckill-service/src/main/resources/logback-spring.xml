@@ -48,7 +48,7 @@
         <encoder>
             <pattern>
                 <!-- 设置日志输出格式 -->
-                %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n
+                [%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5level %X{ip} %red(%X{trace}) %logger - %msg%n
             </pattern>
         </encoder>
     </appender>
@@ -71,7 +71,7 @@
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n</pattern>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5level %X{ip} %red(%X{trace}) %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -87,7 +87,7 @@
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n</pattern>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5level %X{ip} %red(%X{trace}) %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -103,7 +103,7 @@
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n</pattern>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5level %X{ip} %red(%X{trace}) %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -119,7 +119,7 @@
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n</pattern>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5level %X{ip} %red(%X{trace}) %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
