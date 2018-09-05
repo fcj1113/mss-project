@@ -31,7 +31,7 @@ public class AutoConfiguration {
 
 
     /**
-     * AlwaysSampler实例来指定sleuth 100%输出日志
+     * AlwaysSampler实例来指定sleuth 100%采样日志，建议线上减少。
      * 即spring.sleuth.sampler.percentage=1
      * @return
      */

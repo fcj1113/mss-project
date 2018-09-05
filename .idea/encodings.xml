@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-api-client" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-commons-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-commons-parent/mss-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-commons-parent/mss-common-entity" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-commons-parent/mss-common-utils" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-modules-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-modules-parent/mss-auth-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-modules-parent/mss-eureka-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-modules-parent/mss-gateway-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-modules-parent/mss-logcenter-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-services-admin-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-services-admin-parent/mss-monitor-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-services-admin-parent/mss-zipkin-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-services-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-services-parent/mss-base-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-services-parent/mss-order-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-services-parent/mss-seckill-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-starters-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-mongo-spring-boot-starter-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-mongo-spring-boot-starter-parent/mss-mongo-spring-boot-autoconfigure" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-mongo-spring-boot-starter-parent/mss-mongo-spring-boot-starter" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-redis-spring-boot-starter-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-redis-spring-boot-starter-parent/mss-redis-spring-boot-autoconfigure" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-redis-spring-boot-starter-parent/mss-redis-spring-boot-starter" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-ui" charset="UTF-8" />
+  </component>
+</project>

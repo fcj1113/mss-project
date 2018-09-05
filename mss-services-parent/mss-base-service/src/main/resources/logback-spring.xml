@@ -8,6 +8,7 @@
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <!-- 动态日志级别 -->
     <jmxConfigurator/>
+
     <!-- 定义日志文件 输出位置 -->
     <property name="log_dir" value="/logs/${spring.application.name}/"/>
     <!-- 日志最大的历史 30天 -->
@@ -88,7 +89,7 @@
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5level %X{ip} %red(%X{trace}) %logger - %msg%n</pattern>
+            <pattern>${APP_NAME} [%d{yyyy-MM-dd HH:mm:ss.SSS}] %-5level %X{ip} %red(%X{trace}) %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -124,6 +125,48 @@
         </encoder>
     </appender>
 
+
+    <!-- 为logstash输出的json格式的Appender
+    <appender name="logstash" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}.json</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_FILE}.json.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                        "severity": "%level",
+                        "service": "${springAppName:-}",
+                        "trace": "%X{X-B3-TraceId:-}",
+                        "span": "%X{X-B3-SpanId:-}",
+                        "exportable": "%X{X-Span-Export:-}",
+                        "pid": "${PID:-}",
+                        "thread": "%thread",
+                        "class": "%logger{40}",
+                        "rest": "%message"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>-->
+
+
+    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>192.168.177.239:5044</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"appname":"miaoshasha"}</customFields>
+        </encoder>
+    </appender>
+
+
+
     <!-- root级别 DEBUG -->
     <root>
         <!-- 打印debug级别日志及以上级别日志 -->
@@ -134,6 +177,7 @@
         <appender-ref ref="ERROR"/>
         <!-- <appender-ref ref="INFO" />-->
         <appender-ref ref="WARN"/>
+        <appender-ref ref="logstash" />
         <!--<appender-ref ref="DEBUG" />
         <appender-ref ref="TRACE" />-->
     </root>
