@@ -50,7 +50,7 @@ public class UserController extends BaseController {
 
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
-
+        LOGGER.info("-------获取用户详情--"+userDTO.getUserName());
         //查询角色信息
 //        Role role = Assert.notNull(roleService.getRoleByUserId(user.getUserId()),"用户角色信息为空");
 //        BeanUtils.copyProperties(role, userDTO);
