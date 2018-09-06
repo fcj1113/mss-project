@@ -93,41 +93,44 @@ public class OpLogAspect {
     @AfterReturning(value = "pointcut() && @annotation(opLog)", returning = "result")
     public Object afterReturning(JoinPoint joinPoint, com.miaoshasha.common.annotation.OpLog opLog, Object result) {
 
-        Object historyResult = hisDataLocal.get();
+        try {
+            Object historyResult = hisDataLocal.get();
 
-        String userIdObj = AnnotationResolver.parse(opLog.userId(), joinPoint);
+            String userIdObj = AnnotationResolver.parse(opLog.userId(), joinPoint);
 
-        Long userId = Long.parseLong(userIdObj);
-        logger.debug("userId=" + userId);
+            Long userId = Long.parseLong(userIdObj);
+            logger.debug("userId=" + userId);
 
-        logger.debug("执行结果：========" + result);
-        if (result instanceof DataResult) {
-            DataResult dataResult = (DataResult) result;
-            logger.debug("执行结果：" + dataResult.toJson());
-            if (dataResult.isSuccess()) {//返回结果成功
-                //发送记录日志的MQ消息，暂定用rabbitMq，后续根据业务需要扩展为kafka
-                OpLog log = new OpLog();
-                log.setUserId(userId);
-                log.setNotes(opLog.notes());
-                log.setFuncCode(opLog.funcCode());
-                log.setFuncName(opLog.funcName());
-                log.setOpTime(System.currentTimeMillis());
-                log.setOpType(opLog.opType().getValue());
-                if (historyResult != null && historyResult instanceof DataResult) {
-                    log.setHistoryResult(((DataResult) historyResult).toJson());
+            logger.debug("执行结果：========" + result);
+            if (result instanceof DataResult) {
+                DataResult dataResult = (DataResult) result;
+                logger.debug("执行结果：" + dataResult.toJson());
+                if (dataResult.isSuccess()) {//返回结果成功
+                    //发送记录日志的MQ消息，暂定用rabbitMq，后续根据业务需要扩展为kafka
+                    OpLog log = new OpLog();
+                    log.setUserId(userId);
+                    log.setNotes(opLog.notes());
+                    log.setFuncCode(opLog.funcCode());
+                    log.setFuncName(opLog.funcName());
+                    log.setOpTime(System.currentTimeMillis());
+                    log.setOpType(opLog.opType().getValue());
+                    if (historyResult != null && historyResult instanceof DataResult) {
+                        log.setHistoryResult(((DataResult) historyResult).toJson());
+                    }
+                    if (dataResult != null && dataResult instanceof DataResult) {
+                        log.setLastResult(dataResult.toJson());
+                    }
+
+                    //消息
+                    commonMsgPublisher.send(log, RabbitConstants.LOG_EXCHANGE_NAME, RabbitConstants.OP_LOG_QUEUE_NAME, RabbitConstants.OP_LOG_ROUTING_KEY);
+                    //事件监听
+                    //oplogEventPublisher.publishEvent(new OplogEvent(log));
                 }
-                if (dataResult != null && dataResult instanceof DataResult) {
-                    log.setLastResult(dataResult.toJson());
-                }
-
-                //消息
-                commonMsgPublisher.send(log,RabbitConstants.LOG_EXCHANGE_NAME,RabbitConstants.OP_LOG_QUEUE_NAME,RabbitConstants.OP_LOG_ROUTING_KEY);
-                //事件监听
-                //oplogEventPublisher.publishEvent(new OplogEvent(log));
             }
-        }
 
-        hisDataLocal.remove();
+        }finally {
+            hisDataLocal.remove();
+        }
 
         return result;
     }
