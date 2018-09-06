@@ -18,6 +18,7 @@
         <module name="mss-mongo-spring-boot-autoconfigure" />
         <module name="mss-mongo-spring-boot-starter" />
         <module name="mss-monitor-service" />
+        <module name="mss-msgcenter-service" />
         <module name="mss-order-service" />
         <module name="mss-redis-spring-boot-autoconfigure" />
         <module name="mss-seckill-service" />

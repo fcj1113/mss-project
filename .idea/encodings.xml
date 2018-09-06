@@ -12,6 +12,7 @@
     <file url="file://$PROJECT_DIR$/mss-modules-parent/mss-eureka-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mss-modules-parent/mss-gateway-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mss-modules-parent/mss-logcenter-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-modules-parent/mss-msgcenter-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mss-services-admin-parent" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mss-services-admin-parent/mss-monitor-service" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mss-services-admin-parent/mss-zipkin-service" charset="UTF-8" />

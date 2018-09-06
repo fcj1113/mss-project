@@ -15,7 +15,7 @@
         <module>mss-auth-service</module>
         <module>mss-eureka-service</module>
         <module>mss-gateway-service</module>
-        <!--<module>mss-msgcenter-service</module>-->
+        <module>mss-msgcenter-service</module>
         <module>mss-logcenter-service</module>
     </modules>
     <dependencies>
