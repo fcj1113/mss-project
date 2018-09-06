@@ -40,14 +40,15 @@ public class CacheAspect {
     private JedisClient<Object> jedisClient;
 
     @Autowired
-    private RedisClusterProperties redisClusterProperties ;
+    private RedisClusterProperties redisClusterProperties;
     /**
      * 并发时等待超时时间。默认1秒
      */
     public static final long timeout = 100;
 
 
-    private ReentrantLock reentrantLock  =new ReentrantLock();
+    private ReentrantLock reentrantLock = new ReentrantLock();
+
     /**
      * 启用缓存的处理
      *
