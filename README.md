@@ -9,7 +9,7 @@ mss-product
 ├── mss-modules-parent -- 微服务基础平台模块
 ├    ├── mss-auth-service -- 授权服务[9040]
 ├    ├── mss-eureka-service -- 注册中心[9001-9009]
-├    ├── mss-gateway-service -- 网关[9010]
+├    ├── mss-gateway-service -- zuul网关[9010]
 ├    ├── mss-msgcenter-service -- 消息中心[9020]
 ├    └── mss-logcenter-service -- 日志中心[9030]，服务日志和网关日志，系统日志接入ELK；（访问量大时建议使用kafka）
 ├── mss-services-parent  -- 微服务业务模块 
