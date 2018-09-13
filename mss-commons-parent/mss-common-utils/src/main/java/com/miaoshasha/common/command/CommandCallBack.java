@@ -1,7 +1,14 @@
 package com.miaoshasha.common.command;
 
+
 /**
  * 命令接口
+ * @author：fengchaojun <br/>
+ * ===============================
+ * Created with IDEA.
+ * Date：2018-06-12
+ * Time：20:50
+ * ================================
  */
 public interface CommandCallBack<T> {
 

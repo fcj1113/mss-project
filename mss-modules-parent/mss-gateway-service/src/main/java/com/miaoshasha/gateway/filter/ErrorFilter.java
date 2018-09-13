@@ -50,9 +50,12 @@ public class ErrorFilter extends ZuulFilter {
             if (throwable.getCause() instanceof SystemException) {
                 SystemException systemException = (SystemException) throwable.getCause();
                 ctx.setResponseBody(DataResult.faild(systemException.getRetCode(), systemException.getRetMsg()).toJson());
+
             } else {
                 ctx.setResponseBody(DataResult.faild(ErrorCode.SYSTEM_ERROR).toJson());
             }
+            log.error(throwable.getCause().getMessage());
+            throwable.getCause().printStackTrace();
         } else {
             ctx.setResponseBody(DataResult.faild(ErrorCode.SYSTEM_ERROR).toJson());
         }

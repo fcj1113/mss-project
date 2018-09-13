@@ -1,5 +1,14 @@
 package com.miaoshasha.common.command;
 
+/**
+ *
+ * @author：fengchaojun <br/>
+ * ===============================
+ * Created with IDEA.
+ * Date：2018-06-12
+ * Time：20:40
+ * ================================
+ */
 public class CommandExecutor {
 
     private String key ;

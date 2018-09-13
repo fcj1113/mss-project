@@ -1,13 +1,15 @@
 package com.miaoshasha.gateway.entity;
 
+import com.google.common.util.concurrent.RateLimiter;
 import com.miaoshasha.common.base.BaseEntity;
+import com.miaoshasha.common.enums.ErrorCode;
 import lombok.Data;
 
 /**
  * Created by fengchaojun on 2018/7/18.
  */
 @Data
-public class ZuulRouteEntity implements BaseEntity {
+public class ZuulRouteEntity extends BaseLimiterEntity implements BaseEntity{
     private static final long serialVersionUID = -7158043313856484077L;
 
     /**
@@ -65,5 +67,7 @@ public class ZuulRouteEntity implements BaseEntity {
      * 路由名称
      */
     private String routeName ;
+
+
 
 }

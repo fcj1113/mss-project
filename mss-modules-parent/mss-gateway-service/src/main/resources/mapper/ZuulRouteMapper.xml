@@ -3,21 +3,32 @@
 <mapper namespace="com.miaoshasha.gateway.mapper.ZuulRouteMapper">
     <resultMap id="BaseResultMap" type="com.miaoshasha.gateway.entity.ZuulRouteEntity">
 
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="path" jdbcType="VARCHAR" property="path"/>
-        <result column="service_id" jdbcType="VARCHAR" property="serviceId"/>
-        <result column="url" jdbcType="VARCHAR" property="url"/>
-        <result column="strip_prefix" jdbcType="TINYINT" property="stripPrefix"/>
-        <result column="retryable" jdbcType="TINYINT" property="retryable"/>
-        <result column="sensitive_headers" jdbcType="VARCHAR" property="sensitiveHeaders"/>
-        <result column="custom_sensitive_headers" jdbcType="TINYINT" property="customSensitiveHeaders"/>
-        <result column="enabled" jdbcType="TINYINT" property="enabled"/>
-        <result column="route_name" jdbcType="VARCHAR" property="routeName"/>
+
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="path" jdbcType="VARCHAR" property="path" />
+        <result column="service_id" jdbcType="VARCHAR" property="serviceId" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+        <result column="strip_prefix" jdbcType="TINYINT" property="stripPrefix" />
+        <result column="retryable" jdbcType="TINYINT" property="retryable" />
+        <result column="sensitive_headers" jdbcType="VARCHAR" property="sensitiveHeaders" />
+        <result column="custom_sensitive_headers" jdbcType="BIT" property="customSensitiveHeaders" />
+        <result column="enabled" jdbcType="TINYINT" property="enabled" />
+        <result column="route_name" jdbcType="VARCHAR" property="routeName" />
+        <result column="limiter_enabled" jdbcType="TINYINT" property="limiterEnabled" />
+        <result column="permits_per_second" jdbcType="INTEGER" property="permitsPerSecond" />
+        <result column="permits" jdbcType="INTEGER" property="permits" />
+        <result column="timeout" jdbcType="BIGINT" property="timeout" />
+        <result column="time_unit" jdbcType="VARCHAR" property="timeUnit" />
+        <result column="create_user" jdbcType="BIGINT" property="createUser" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_user" jdbcType="BIGINT" property="updateUser" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     </resultMap>
 
     <sql id="Base_Column_List">
     id, path, service_id, url, strip_prefix, retryable, sensitive_headers, custom_sensitive_headers,
-    enabled, route_name
+    enabled, route_name, limiter_enabled, permits_per_second, permits, timeout, time_unit,
+    create_user, create_time, update_user, update_time
   </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
@@ -36,20 +47,29 @@
 
     <insert id="insert" parameterType="com.miaoshasha.gateway.entity.ZuulRouteEntity" useGeneratedKeys="true" keyProperty="id">
 
-    insert into base_zuul_route ( path, service_id,
-      url, strip_prefix, retryable, 
-      sensitive_headers, custom_sensitive_headers, enabled, 
-      route_name)
-    values (#{path,jdbcType=VARCHAR}, #{serviceId,jdbcType=VARCHAR},
-      #{url,jdbcType=VARCHAR}, #{stripPrefix,jdbcType=TINYINT}, #{retryable,jdbcType=TINYINT},
-      #{sensitiveHeaders,jdbcType=VARCHAR}, #{customSensitiveHeaders,jdbcType=TINYINT}, #{enabled,jdbcType=TINYINT},
-      #{routeName,jdbcType=VARCHAR})
+   insert into base_zuul_route (id, path, service_id,
+      url, strip_prefix, retryable,
+      sensitive_headers, custom_sensitive_headers, enabled,
+      route_name, limiter_enabled, permits_per_second,
+      permits, timeout, time_unit,
+      create_user, create_time, update_user,
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{path,jdbcType=VARCHAR}, #{serviceId,jdbcType=VARCHAR},
+      #{url,jdbcType=VARCHAR}, #{stripPrefix,jdbcType=BIT}, #{retryable,jdbcType=BIT},
+      #{sensitiveHeaders,jdbcType=VARCHAR}, #{customSensitiveHeaders,jdbcType=BIT}, #{enabled,jdbcType=BIT},
+      #{routeName,jdbcType=VARCHAR}, #{limiterEnabled,jdbcType=BIT}, #{permitsPerSecond,jdbcType=INTEGER},
+      #{permits,jdbcType=INTEGER}, #{timeout,jdbcType=BIGINT}, #{timeUnit,jdbcType=VARCHAR},
+      #{createUser,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT},
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
 
     <insert id="insertSelective" parameterType="com.miaoshasha.gateway.entity.ZuulRouteEntity" useGeneratedKeys="true" keyProperty="id">
 
         insert into base_zuul_route
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
             <if test="path != null">
                 path,
             </if>
@@ -77,8 +97,38 @@
             <if test="routeName != null">
                 route_name,
             </if>
+            <if test="limiterEnabled != null">
+                limiter_enabled,
+            </if>
+            <if test="permitsPerSecond != null">
+                permits_per_second,
+            </if>
+            <if test="permits != null">
+                permits,
+            </if>
+            <if test="timeout != null">
+                timeout,
+            </if>
+            <if test="timeUnit != null">
+                time_unit,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
             <if test="path != null">
                 #{path,jdbcType=VARCHAR},
             </if>
@@ -89,22 +139,49 @@
                 #{url,jdbcType=VARCHAR},
             </if>
             <if test="stripPrefix != null">
-                #{stripPrefix,jdbcType=TINYINT},
+                #{stripPrefix,jdbcType=BIT},
             </if>
             <if test="retryable != null">
-                #{retryable,jdbcType=TINYINT},
+                #{retryable,jdbcType=BIT},
             </if>
             <if test="sensitiveHeaders != null">
                 #{sensitiveHeaders,jdbcType=VARCHAR},
             </if>
             <if test="customSensitiveHeaders != null">
-                #{customSensitiveHeaders,jdbcType=TINYINT},
+                #{customSensitiveHeaders,jdbcType=BIT},
             </if>
             <if test="enabled != null">
-                #{enabled,jdbcType=TINYINT},
+                #{enabled,jdbcType=BIT},
             </if>
             <if test="routeName != null">
                 #{routeName,jdbcType=VARCHAR},
+            </if>
+            <if test="limiterEnabled != null">
+                #{limiterEnabled,jdbcType=BIT},
+            </if>
+            <if test="permitsPerSecond != null">
+                #{permitsPerSecond,jdbcType=INTEGER},
+            </if>
+            <if test="permits != null">
+                #{permits,jdbcType=INTEGER},
+            </if>
+            <if test="timeout != null">
+                #{timeout,jdbcType=BIGINT},
+            </if>
+            <if test="timeUnit != null">
+                #{timeUnit,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=BIGINT},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
             </if>
         </trim>
     </insert>
@@ -177,5 +254,6 @@
                     AND route_name = #{routeName}
                 </if>
             </where>
+         order by id
     </select>
 </mapper>

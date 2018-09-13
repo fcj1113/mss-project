@@ -3,7 +3,13 @@ package com.miaoshasha.common.command;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 命令锁
+ * 高并发命令锁，适应于多key锁，非分布式锁
+ * @author：fengchaojun <br/>
+ * ===============================
+ * Created with IDEA.
+ * Date：2018-06-12
+ * Time：21:40
+ * ================================
  */
 public class CommandLock {
 
