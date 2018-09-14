@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
-public @interface RateLimiter {
+public @interface ApiRateLimiter {
 
     /** 限流的key，类名+方法名 */
     String value() default "defaultKey";

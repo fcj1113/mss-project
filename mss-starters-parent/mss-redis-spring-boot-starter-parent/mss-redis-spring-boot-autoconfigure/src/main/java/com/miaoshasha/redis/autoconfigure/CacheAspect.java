@@ -1,11 +1,10 @@
-package com.miaoshasha.redis.aspect;
+package com.miaoshasha.redis.autoconfigure;
 
 import com.miaoshasha.common.command.CommandCallBack;
 import com.miaoshasha.common.command.CommandExecutor;
 import com.miaoshasha.common.command.CommandLock;
 import com.miaoshasha.redis.annotation.EnableCache;
 import com.miaoshasha.redis.annotation.EnableCacheEvict;
-import com.miaoshasha.redis.autoconfigure.RedisClusterProperties;
 import com.miaoshasha.redis.client.JedisClient;
 import com.miaoshasha.redis.util.CacheHandler;
 import com.miaoshasha.redis.util.ObjectHolder;

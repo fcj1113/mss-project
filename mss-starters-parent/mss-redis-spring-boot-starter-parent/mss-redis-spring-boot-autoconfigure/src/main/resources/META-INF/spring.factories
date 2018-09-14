@@ -1,3 +1,5 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.miaoshasha.redis.autoconfigure.RedisClusterAutoConfiguration
+com.miaoshasha.redis.autoconfigure.RedisClusterAutoConfiguration,\
+com.miaoshasha.redis.autoconfigure.CacheAspect,\
+com.miaoshasha.redis.autoconfigure.DistributedLockAspect

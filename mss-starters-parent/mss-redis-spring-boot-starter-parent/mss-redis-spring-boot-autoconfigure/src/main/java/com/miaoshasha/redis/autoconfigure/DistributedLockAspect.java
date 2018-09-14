@@ -1,4 +1,4 @@
-package com.miaoshasha.redis.aspect;
+package com.miaoshasha.redis.autoconfigure;
 
 import com.miaoshasha.common.utils.AnnotationResolver;
 import com.miaoshasha.redis.annotation.EnableLock;
