@@ -44,14 +44,18 @@ public class RateLimiterAspect {
         MethodSignature methodSignature = (MethodSignature) pjp.getSignature();
         ApiRateLimiter apiRateLimiter = methodSignature.getMethod().getAnnotation(ApiRateLimiter.class);
 
-        String key = apiRateLimiter.value();//todo，key策略待定制
+        String className = pjp.getTarget().getClass().getName();
+        String methodName = methodSignature.getMethod().getName();
         double permitsPerSecond = apiRateLimiter.permitsPerSecond();
+
+        String key = className + "-" + methodName + "-" + apiRateLimiter.value();//key策略,全路径类名+方法名+自定义key
 
         RateLimiter rateLimiter = rateLimiterMap.get(apiRateLimiter.value());
         if (rateLimiter == null) {
-            rateLimiter = rateLimiterProcess(key,permitsPerSecond,new AtomicInteger(0));
+            rateLimiter = rateLimiterProcess(key, permitsPerSecond, new AtomicInteger(0));
         }
-        if (rateLimiter.tryAcquire(apiRateLimiter.permits(), apiRateLimiter.timeout(), apiRateLimiter.timeUnit())) {
+        if (rateLimiter != null &&
+                rateLimiter.tryAcquire(apiRateLimiter.permits(), apiRateLimiter.timeout(), apiRateLimiter.timeUnit())) {
             try {
                 return pjp.proceed();
             } catch (Exception e) {
@@ -65,31 +69,33 @@ public class RateLimiterAspect {
 
     /**
      * 高并发时获取限流对象需要同步
+     *
      * @param key
      * @param permitsPerSecond
      * @param counter
      * @return
      * @throws Throwable
      */
-    public RateLimiter rateLimiterProcess(String key, double permitsPerSecond ,AtomicInteger counter) throws Throwable {
+    public RateLimiter rateLimiterProcess(String key, double permitsPerSecond, AtomicInteger counter) throws Throwable {
 
         //循环超过10次,即等待500毫秒，超时
         if (counter.incrementAndGet() > 10) {
-            throw new RuntimeException("系统限流对象超时");
+            log.error("ERRORMSG:获取API限流规则对象超时");
+            return null;
         }
 
         return new CommandLock().commandExecutor(key).run(new CommandCallBack<RateLimiter>() {
 
             @Override
-            public RateLimiter doIn() throws Throwable {
-                RateLimiter rateLimiter = RateLimiter.create(permitsPerSecond) ;
-                rateLimiterMap.put(key,rateLimiter);
+            public RateLimiter obtain() throws Throwable {
+                RateLimiter rateLimiter = RateLimiter.create(permitsPerSecond);
+                rateLimiterMap.put(key, rateLimiter);
                 return rateLimiter;
             }
 
             @Override
-            public RateLimiter doOut() throws Throwable {
-                return rateLimiterProcess(key,permitsPerSecond,counter);
+            public RateLimiter notObtain() throws Throwable {
+                return rateLimiterProcess(key, permitsPerSecond, counter);
             }
         });
 
