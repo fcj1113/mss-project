@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public @interface ApiRateLimiter {
 
     /** 限流的key，类名+方法名 */
-    String value() default "defaultKey";
+    String value() default "";
 
     /** 每秒限制请求数*/
     double permitsPerSecond() default 80;

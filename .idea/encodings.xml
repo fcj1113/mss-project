@@ -24,6 +24,9 @@
     <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-mongo-spring-boot-starter-parent" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-mongo-spring-boot-starter-parent/mss-mongo-spring-boot-autoconfigure" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-mongo-spring-boot-starter-parent/mss-mongo-spring-boot-starter" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-ratelimiter-spring-boot-starter-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-ratelimiter-spring-boot-starter-parent/mss-ratelimiter-spring-boot-autoconfigure" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-ratelimiter-spring-boot-starter-parent/mss-ratelimiter-spring-boot-starter" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-redis-spring-boot-starter-parent" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-redis-spring-boot-starter-parent/mss-redis-spring-boot-autoconfigure" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mss-starters-parent/mss-redis-spring-boot-starter-parent/mss-redis-spring-boot-starter" charset="UTF-8" />

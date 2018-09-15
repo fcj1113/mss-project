@@ -11,7 +11,7 @@
 
     <artifactId>mss-redis-spring-boot-starter</artifactId>
     <name>mss-redis-spring-boot-starter</name>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>

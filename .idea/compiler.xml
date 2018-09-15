@@ -20,7 +20,10 @@
         <module name="mss-monitor-service" />
         <module name="mss-msgcenter-service" />
         <module name="mss-order-service" />
+        <module name="mss-ratelimiter-spring-boot-autoconfigure" />
+        <module name="mss-ratelimiter-spring-boot-starter" />
         <module name="mss-redis-spring-boot-autoconfigure" />
+        <module name="mss-redis-spring-boot-starter" />
         <module name="mss-seckill-service" />
         <module name="mss-ui" />
         <module name="mss-zipkin-service" />

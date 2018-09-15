@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mss-ratelimiter-spring-boot-autoconfigure</artifactId>
-
+    <name>mss-ratelimiter-spring-boot-autoconfigure</name>
     <packaging>jar</packaging>
     <dependencies>
 

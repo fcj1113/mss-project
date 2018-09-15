@@ -11,6 +11,7 @@ import com.miaoshasha.common.dto.user.UserDTO;
 import com.miaoshasha.common.entity.user.Role;
 import com.miaoshasha.common.entity.user.User;
 import com.miaoshasha.common.enums.OpType;
+import com.miaoshasha.ratelimiter.annotation.ApiRateLimiter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -45,6 +46,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "userId", value = "用户id", paramType = "path", required = true, dataType = "Long")
     })
     @RequestMapping(value = "/getInfoById/{userId}")
+    @ApiRateLimiter(permitsPerSecond = 1)
     public DataResult<UserDTO> getInfoById(@PathVariable("userId") Long userId) {
         User user = Assert.notNull( userService.findById(userId), "用户信息为空");
 
