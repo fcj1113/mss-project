@@ -13,15 +13,15 @@ package com.miaoshasha.common.command;
 public interface CommandCallBack<T> {
 
     /**
-     * 执行命令
+     * 获得锁执行方法
      * @throws Throwable
      */
-    T doIn() throws Throwable ;
+    T obtain() throws Throwable ;
 
     /**
-     * 不进入执行命令时，执行其他业务流程
+     * 未获得锁执行方法，执行其他业务流程
      * @throws Throwable
      */
-    T doOut() throws Throwable;
+    T notObtain() throws Throwable;
 
 }
