@@ -33,14 +33,14 @@ public class CommandExecutor {
     public <T> T run(CommandCallBack<T> commandCallBack) throws Throwable {
         if(isAcquireLock()){//执行命令
             try {
-                return commandCallBack.doIn();
+                return commandCallBack.obtain();
             }finally {
                 commandLock.release(key);
             }
         }else{
             //先等待
             commandLock.waitCall();
-            return commandCallBack.doOut();
+            return commandCallBack.notObtain();
         }
     }
 
