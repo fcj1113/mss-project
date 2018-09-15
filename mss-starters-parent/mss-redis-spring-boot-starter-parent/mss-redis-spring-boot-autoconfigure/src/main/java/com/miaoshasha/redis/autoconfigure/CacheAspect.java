@@ -117,12 +117,12 @@ public class CacheAspect {
             resultObj = commandExecutor.run(new CommandCallBack<Object>() {
 
                 @Override
-                public Object doIn() throws Throwable {
+                public Object obtain() throws Throwable {
                     return setCache(joinPoint, enableCache, key);
                 }
 
                 @Override
-                public Object doOut() throws Throwable {
+                public Object notObtain() throws Throwable {
                     return cacheProcess(joinPoint, enableCache, key, counter);
                 }
             });
