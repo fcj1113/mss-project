@@ -50,7 +50,7 @@ public class RateLimiterAspect {
 
         String key = className + "-" + methodName + "-" + apiRateLimiter.value();//key策略,全路径类名+方法名+自定义key
 
-        RateLimiter rateLimiter = rateLimiterMap.get(apiRateLimiter.value());
+        RateLimiter rateLimiter = rateLimiterMap.get(key);
         if (rateLimiter == null) {
             rateLimiter = rateLimiterProcess(key, permitsPerSecond, new AtomicInteger(0));
         }
@@ -63,7 +63,9 @@ public class RateLimiterAspect {
             }
         }
 
-        return null;
+        log.error("ERRORMSG:请求频率超过API限流数");
+        throw new RuntimeException("请求频率过高，系统API进入限流");
+        //return null;
     }
 
 
@@ -81,7 +83,8 @@ public class RateLimiterAspect {
         //循环超过10次,即等待500毫秒，超时
         if (counter.incrementAndGet() > 10) {
             log.error("ERRORMSG:获取API限流规则对象超时");
-            return null;
+            throw new RuntimeException("获取系统API限流规则对象超时");
+           //return null;
         }
 
         return new CommandLock().commandExecutor(key).run(new CommandCallBack<RateLimiter>() {

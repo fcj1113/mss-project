@@ -5,6 +5,7 @@ import com.miaoshasha.common.domain.Status;
 import com.miaoshasha.common.enums.ErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +34,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public DataResult<?> exception(HttpServletRequest request, Exception ex) {
         LOGGER.error("Exception[" + ex.getMessage() + "]");
-        return dataResult(request, ErrorCode.SYSTEM_ERROR);
+        return dataResult(request, ErrorCode.SYSTEM_ERROR,ex.getMessage());
     }
 
 
@@ -77,7 +78,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = IllegalArgumentException.class)
     public DataResult<?> illegalArgumentException(HttpServletRequest request, IllegalArgumentException ex) {
         LOGGER.error("IllegalArgumentException[" + ex.getMessage() + "]");
-        return dataResult(request, ErrorCode.ILLEGAL_ARGUMENT);
+        return dataResult(request, ErrorCode.ILLEGAL_ARGUMENT,ex.getMessage());
     }
 
     /**
@@ -90,7 +91,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = RuntimeException.class)
     public DataResult<?> runtimeException(HttpServletRequest request, RuntimeException ex) {
         LOGGER.error("RuntimeException[" + ex.getMessage() + "]");
-        return dataResult(request, ErrorCode.SYSTEM_ERROR);
+        return dataResult(request, ErrorCode.SYSTEM_ERROR,ex.getMessage());
     }
 
     /**
@@ -103,7 +104,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = NullPointerException.class)
     public DataResult<?> nullPointerException(HttpServletRequest request, NullPointerException ex) {
         LOGGER.error("nullPointerException[" + ex.getMessage() + "]");
-        return dataResult(request, ErrorCode.SYSTEM_ERROR_NULL_POINTER);
+        return dataResult(request, ErrorCode.SYSTEM_ERROR_NULL_POINTER,ex.getMessage());
     }
 
 
@@ -112,8 +113,11 @@ public class GlobalExceptionHandler {
         request.setAttribute(RET_MSG, status.getRetMsg());
     }
 
-    private DataResult<?> dataResult(HttpServletRequest request, ErrorCode errorCode) {
-        DataResult<?> dataResult = DataResult.faild(errorCode.getCode(), errorCode.getMsg());
+    private DataResult<?> dataResult(HttpServletRequest request, ErrorCode errorCode,String errorMsg) {
+        if(StringUtils.isEmpty(errorMsg)){
+            errorMsg = errorCode.getMsg();
+        }
+        DataResult<?> dataResult = DataResult.faild(errorCode.getCode(), errorMsg);
         this.requestError(request, dataResult.getStatus());
         return dataResult;
     }
