@@ -4,13 +4,15 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 
 @EnableRabbit
-@ComponentScan("com.miaoshasha")
-@MapperScan("com.miaoshasha.seckill.mapper")
 @SpringBootApplication
+@ComponentScan("com.miaoshasha")
+@MapperScan(basePackages = "com.miaoshasha.seckill.mapper")
 @EnableEurekaClient
 public class SeckillServiceApplication {
 

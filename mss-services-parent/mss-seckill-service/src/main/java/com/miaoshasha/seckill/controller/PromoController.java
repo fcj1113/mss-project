@@ -56,7 +56,6 @@ public class PromoController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "活动ID", paramType = "path", required = true, dataType = "Long")
     })
-    @OpLog(userId = "1",notes = "获取单个活动详情",opType = OpType.QUERY)
     @RequestMapping(value = "findById/{id}",method = RequestMethod.POST)
     public DataResult<PromoInfo> findById(@PathVariable("id") Long id){
         return DataResult.success(promoService.findById(id));
