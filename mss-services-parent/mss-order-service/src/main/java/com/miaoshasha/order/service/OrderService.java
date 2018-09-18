@@ -28,4 +28,5 @@ public interface OrderService extends BaseService<OrderInfo> {
      */
      long savePromoOrder(PromoDTO promoDTO);
 
+
 }

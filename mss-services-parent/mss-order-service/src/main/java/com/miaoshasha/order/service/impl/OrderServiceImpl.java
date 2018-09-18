@@ -6,8 +6,10 @@ import com.miaoshasha.common.entity.order.OrderInfo;
 import com.miaoshasha.common.entity.order.OrderProduct;
 import com.miaoshasha.common.entity.order.OrderSend;
 import com.miaoshasha.order.mapper.OrderInfoMapper;
+import com.miaoshasha.order.service.OrderProductService;
 import com.miaoshasha.order.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 public class OrderServiceImpl extends AbstractBaseService<OrderInfoMapper, OrderInfo> implements OrderService {
+
+    @Autowired
+    private OrderProductService orderProductService ;
 
     @Transactional
     @Override
@@ -37,6 +42,8 @@ public class OrderServiceImpl extends AbstractBaseService<OrderInfoMapper, Order
             return orderInfo.getOrderId();
         }
         this.save(orderInfo);
+        //保存商品信息
+        orderProductService.save(promoDTO.getOrderProduct());
         return orderInfo.getOrderId();
     }
 }
