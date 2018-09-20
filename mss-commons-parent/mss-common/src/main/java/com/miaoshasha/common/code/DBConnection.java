@@ -43,17 +43,15 @@ public class DBConnection {
     }
 
 
-    public void close(Connection connection) {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static void close(Connection connection) {
+        close(null,null,connection);
     }
 
-    public void close(ResultSet resultSet, Statement statement, Connection connection) {
+    public static void close(ResultSet resultSet, Connection connection) {
+        close(resultSet,null,connection);
+    }
+
+    public static void close(ResultSet resultSet, Statement statement, Connection connection) {
 
         try {
             if (resultSet != null) {

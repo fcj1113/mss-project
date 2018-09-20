@@ -74,6 +74,7 @@ public class DBMetaData {
             list.add(tableColumn);
         }
 
+        DBConnection.close(resultSet,connection);
         return list;
     }
 
