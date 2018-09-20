@@ -3,7 +3,6 @@ package com.miaoshasha.seckill.service.impl;
 import com.miaoshasha.common.entity.store.PromoInfo;
 import com.miaoshasha.common.enums.ErrorCode;
 import com.miaoshasha.common.exception.SystemException;
-import com.miaoshasha.common.utils.RedisCache;
 import com.miaoshasha.redis.annotation.EnableCache;
 import com.miaoshasha.seckill.mapper.PromoInfoMapper;
 import com.miaoshasha.seckill.mapper.PromoTypeMapper;

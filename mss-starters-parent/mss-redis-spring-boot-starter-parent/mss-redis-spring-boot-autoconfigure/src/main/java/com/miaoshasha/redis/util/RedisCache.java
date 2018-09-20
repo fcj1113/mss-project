@@ -1,4 +1,4 @@
-package com.miaoshasha.common.utils;
+package com.miaoshasha.redis.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * 基于spring的缓存机制
  * Created by fengchaojun on 2018/5/17.
  */
 public class RedisCache {

@@ -5,6 +5,7 @@ import com.miaoshasha.common.utils.FastJsonRedisSerializer;
 import com.miaoshasha.redis.client.JedisClusterClient;
 import com.miaoshasha.redis.lock.DistributedLock;
 import com.miaoshasha.redis.lock.RedisDistributedLock;
+import com.miaoshasha.redis.util.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
@@ -120,4 +122,15 @@ public class RedisClusterAutoConfiguration {
     public DistributedLock redisDistributedLock(RedisTemplate<Object, Object> redisTemplate){
         return new RedisDistributedLock(redisTemplate);
     }
+
+    /**
+     * 实例化redis工具
+     * @param redisTemplate
+     * @return
+     */
+    @Bean
+    public RedisCache redisCache(StringRedisTemplate redisTemplate){
+        return new RedisCache(redisTemplate);
+    }
+
 }

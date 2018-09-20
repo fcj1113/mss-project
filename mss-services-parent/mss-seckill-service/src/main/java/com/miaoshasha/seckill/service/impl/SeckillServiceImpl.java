@@ -4,7 +4,6 @@ import com.miaoshasha.common.dto.order.PromoDTO;
 import com.miaoshasha.common.entity.store.PromoInfo;
 import com.miaoshasha.common.enums.ErrorCode;
 import com.miaoshasha.common.exception.SystemException;
-import com.miaoshasha.common.utils.RedisCache;
 import com.miaoshasha.common.utils.Sequence;
 import com.miaoshasha.common.utils.SystemClock;
 import com.miaoshasha.redis.lock.DistributedLock;
