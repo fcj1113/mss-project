@@ -22,8 +22,6 @@ public class OrderMsgPublisher implements MsgPublisher {
 
     private Logger logger = LoggerFactory.getLogger(OrderMsgPublisher.class);
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(4);
-
     @Autowired
     private RabbitTemplate rabbitTemplate;
 

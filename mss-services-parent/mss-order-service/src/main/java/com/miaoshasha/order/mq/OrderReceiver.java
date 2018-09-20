@@ -16,16 +16,21 @@ import org.springframework.stereotype.Component;
 @Component
 @RabbitListener(bindings = {
         @QueueBinding(value =
-        @Queue(value = RabbitConstants.ORDER_PROMO_QUEUE_NAME, durable = "true", autoDelete = "false", exclusive = "false"),
-                exchange = @Exchange(value = RabbitConstants.ORDER_EXCHANGE_NAME,durable = "true"))})
+            @Queue(value = RabbitConstants.ORDER_PROMO_QUEUE_NAME, durable = "true", autoDelete = "false", exclusive = "false"),
+                exchange = @Exchange(value = RabbitConstants.ORDER_EXCHANGE_NAME, durable = "true"),
+                key = RabbitConstants.ORDER_PROMO_ROUTING_KEY)})
 public class OrderReceiver {
 
     @Autowired
-    private OrderService orderService ;
+    private OrderService orderService;
 
     @RabbitHandler
     public void process(PromoDTO promoDTO) {
-        log.debug("队列内容："+ JSON.toJSONString(promoDTO));
-        orderService.savePromoOrder(promoDTO);
+        log.debug("队列内容：" + JSON.toJSONString(promoDTO));
+        try {
+            orderService.savePromoOrder(promoDTO);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 }

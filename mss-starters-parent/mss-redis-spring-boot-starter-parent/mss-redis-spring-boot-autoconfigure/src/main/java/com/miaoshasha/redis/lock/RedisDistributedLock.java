@@ -84,7 +84,7 @@ public class RedisDistributedLock extends AbstractDistributedLock{
                     return commands.set(key, uuid, "NX", "PX", expire);
                 }
             });
-            logger.info("执行结果:"+result);
+            //logger.info("执行结果:"+result);
             return !StringUtils.isEmpty(result);
 
         } catch (Exception e) {

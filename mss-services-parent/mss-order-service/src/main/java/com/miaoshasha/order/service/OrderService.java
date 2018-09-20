@@ -19,14 +19,14 @@ public interface OrderService extends BaseService<OrderInfo> {
      * @param orderSend
      * @return
      */
-     long saveOrder(OrderInfo orderInfo, OrderProduct orderProduct, OrderSend orderSend);
+     long saveOrder(OrderInfo orderInfo, OrderProduct orderProduct, OrderSend orderSend) throws Throwable;
 
     /**
      * 保存活动订单
      * @param promoDTO
      * @return
      */
-     long savePromoOrder(PromoDTO promoDTO);
+     long savePromoOrder(PromoDTO promoDTO) throws Throwable;
 
 
 }

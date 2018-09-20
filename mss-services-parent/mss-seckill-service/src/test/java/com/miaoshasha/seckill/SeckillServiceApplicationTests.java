@@ -4,6 +4,7 @@ import com.miaoshasha.common.dto.order.PromoDTO;
 import com.miaoshasha.common.entity.order.OrderInfo;
 import com.miaoshasha.common.entity.order.OrderProduct;
 import com.miaoshasha.common.entity.store.PromoInfo;
+import com.miaoshasha.common.utils.Sequence;
 import com.miaoshasha.common.utils.Utils;
 import com.miaoshasha.seckill.service.PromoService;
 import com.miaoshasha.seckill.service.SeckillService;
@@ -40,7 +41,7 @@ public class SeckillServiceApplicationTests {
     @Test
     public void promoSaveTest() {
         PromoInfo promoInfo = new PromoInfo();
-        promoInfo.setPromoName("测试一元抢购28");
+        promoInfo.setPromoName("测试一元抢购31");
         promoInfo.setStockQuantity(2000);
         promoInfo.setBeginTime(System.currentTimeMillis() + 60000L);
         promoInfo.setEndTime(System.currentTimeMillis() + 36000000L);
@@ -88,15 +89,17 @@ public class SeckillServiceApplicationTests {
 
         promoDTO.setOrderProduct(orderProduct);
         promoDTO.setOrderInfo(orderInfo);
-        promoDTO.setPromoId(28L);
+        promoDTO.setPromoId(31L);
         promoDTO.setUserId((long) Utils.genRandom(100000,999999));
         orderInfo.setMemberId((long) Utils.genRandom(1000000,9999999));
         ExecutorService pool = Executors.newFixedThreadPool(10);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             pool.execute(() -> {
-                seckillService.doSecKill(promoDTO);
+//                seckillService.doSecKill(promoDTO);
+                seckillService.testSeq();
             });
+
         }
     }
 
@@ -104,6 +107,25 @@ public class SeckillServiceApplicationTests {
     public void getPromoTest(){
         promoService.findById(4L);
         promoService.getPromoInfo();
+    }
+
+
+    @Autowired
+    private Sequence sequence;
+
+
+    //19630213721751552
+    //19630668719849472
+    @Test
+    public void testSeq(){
+        ExecutorService pool = Executors.newFixedThreadPool(10);
+        for (int i = 0; i <1000 ; i++) {
+            pool.execute(() -> {
+                long l1 = sequence.nextId();
+                System.out.println("------------" + l1 + "-------------");
+            });
+        }
+
     }
 
 }

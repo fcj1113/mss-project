@@ -26,23 +26,21 @@
     where pid = #{pid,jdbcType=BIGINT}
   </delete>
 
-  <insert id="insert" parameterType="com.miaoshasha.common.entity.order.OrderProduct">
+  <insert id="insert" parameterType="com.miaoshasha.common.entity.order.OrderProduct" useGeneratedKeys="true" keyProperty="pid">
 
-    insert into order_product (pid, order_id, product_id, 
+    insert into order_product ( order_id, product_id,
       sku_id, product_price, quantity, 
       create_time, create_user)
-    values (#{pid,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
+    values ( #{orderId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT},
       #{skuId,jdbcType=BIGINT}, #{productPrice,jdbcType=BIGINT}, #{quantity,jdbcType=INTEGER}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT})
   </insert>
 
-  <insert id="insertSelective" parameterType="com.miaoshasha.common.entity.order.OrderProduct">
+  <insert id="insertSelective" parameterType="com.miaoshasha.common.entity.order.OrderProduct" useGeneratedKeys="true" keyProperty="pid">
 
     insert into order_product
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="pid != null">
-        pid,
-      </if>
+
       <if test="orderId != null">
         order_id,
       </if>
@@ -66,9 +64,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="pid != null">
-        #{pid,jdbcType=BIGINT},
-      </if>
+
       <if test="orderId != null">
         #{orderId,jdbcType=BIGINT},
       </if>

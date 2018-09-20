@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderServiceImpl extends AbstractBaseService<OrderInfoMapper, OrderInfo> implements OrderService {
 
     @Autowired
-    private OrderProductService orderProductService ;
+    private OrderProductService orderProductService;
 
     @Transactional
     @Override
@@ -34,16 +34,22 @@ public class OrderServiceImpl extends AbstractBaseService<OrderInfoMapper, Order
 
     @Transactional
     @Override
-    public long savePromoOrder(PromoDTO promoDTO) {
-        OrderInfo orderInfo = promoDTO.getOrderInfo();
-        log.debug("订单号：" + orderInfo.getOrderId());
-        if(this.findById(orderInfo.getOrderId()) != null){
-            log.debug("重复订单，ORDER_ID:"+orderInfo.getOrderId());
+    public long savePromoOrder(PromoDTO promoDTO) throws Throwable{
+
+            OrderInfo orderInfo = promoDTO.getOrderInfo();
+
+            log.debug("订单号：" + orderInfo.getOrderId());
+            if (this.findById(orderInfo.getOrderId()) != null) {
+                log.debug("重复订单，ORDER_ID:" + orderInfo.getOrderId());
+                return orderInfo.getOrderId();
+            }
+            this.save(orderInfo);
+            long orderId = orderInfo.getOrderId();
+            //保存商品信息
+            OrderProduct orderProduct = promoDTO.getOrderProduct();
+            orderProduct.setOrderId(orderId);
+            orderProductService.save(orderProduct);
             return orderInfo.getOrderId();
-        }
-        this.save(orderInfo);
-        //保存商品信息
-        orderProductService.save(promoDTO.getOrderProduct());
-        return orderInfo.getOrderId();
+
     }
 }

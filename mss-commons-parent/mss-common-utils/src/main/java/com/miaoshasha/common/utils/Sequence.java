@@ -1,6 +1,14 @@
 package com.miaoshasha.common.utils;
 
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * 基于Twitter的Snowflake算法实现分布式高效有序ID(sequence)
  * <p>
@@ -30,7 +38,7 @@ public class Sequence {
     /**
      * 起始时间戳，用于用当前时间戳减去这个时间戳，算出偏移量
      **/
-    private final long startTime = 1532672506886L;
+    private static final long startTime ;
 
     /**
      * workerId占用的位数5（表示只允许workId的范围为：0-1023）
@@ -69,6 +77,19 @@ public class Sequence {
     private long lastTimestamp = -1L;
     private boolean isClock = false;
 
+    static {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2016, Calendar.NOVEMBER, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        startTime = calendar.getTimeInMillis();
+    }
+
+    /**起始值切换*/
+    public boolean numberSwitch = false ;
+
     /**
      * 基于Snowflake创建分布式ID生成器
      * <p>
@@ -98,7 +119,7 @@ public class Sequence {
      *
      * @return
      */
-    public synchronized Long nextId() {
+    private Long generateKey() {
         long timestamp = this.timeGen();
 
         // 闰秒：如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
@@ -128,7 +149,16 @@ public class Sequence {
             }
         } else {
             // 时间戳改变，毫秒内序列重置
+//            if(numberSwitch){
+//                sequence = 1L;
+//                numberSwitch = false ;
+//            }else{
+//                sequence = 0L;
+//                numberSwitch = true ;
+//            }
+
             sequence = 0L;
+
         }
 
         lastTimestamp = timestamp;
@@ -171,6 +201,35 @@ public class Sequence {
         } else {
             return System.currentTimeMillis();
         }
+    }
+
+    private List<Long> idPool = new ArrayList<>();
+    /**预置的id数量**/
+    private final int preset = 1000 ;
+
+    public void putId(){
+        System.out.println("------------重新补充-------------");
+        for (int i = 0; i < preset ; i++) {
+            long id = this.generateKey();
+            idPool.add(id);
+        }
+    }
+
+
+    public synchronized long nextId(){
+        //低于10个时，重新获取
+        if(idPool.size()<=10 ){
+            putId();
+        }
+        long id = idPool.get(0);
+
+        if(id == 0) {
+            id = this.generateKey();
+        }else{
+            idPool.remove(0);
+        }
+
+        return id;
     }
 
 }
