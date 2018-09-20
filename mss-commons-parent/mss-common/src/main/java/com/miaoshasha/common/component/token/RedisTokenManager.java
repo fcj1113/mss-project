@@ -1,6 +1,7 @@
 package com.miaoshasha.common.component.token;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.miaoshasha.common.bean.Token;
 import com.miaoshasha.common.domain.DataResult;
 import com.miaoshasha.common.enums.ErrorCode;
@@ -9,6 +10,8 @@ import com.miaoshasha.common.utils.MD5Util;
 import com.miaoshasha.common.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.cache.RedisCache;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -22,7 +25,7 @@ public class RedisTokenManager implements TokenManager {
     public static final String KEY_PREFIX = "MSS_TOKEN:";
 
     @Autowired
-    private RedisCache redisCache;
+    private StringRedisTemplate stringRedisTemplate;
 
 
     @Override
@@ -32,7 +35,8 @@ public class RedisTokenManager implements TokenManager {
         String tokenStr = token.getAccessToken() + "__" + token.getRefreshToken();
         String md5 = MD5Util.MD5(tokenStr);
         //存储到redis中
-        redisCache.set(KEY_PREFIX + md5, token);
+        //stringRedisTemplate.set(KEY_PREFIX + md5, token);
+        stringRedisTemplate.opsForValue().set(KEY_PREFIX + md5,  JSON.toJSONString(token, SerializerFeature.WriteClassName));
         return tokenStr;
     }
 
@@ -48,7 +52,7 @@ public class RedisTokenManager implements TokenManager {
             throw new SystemException(ErrorCode.ILLEGAL_CALL);
         }
 
-        Token token = JSON.parseObject(redisCache.get(KEY_PREFIX + md5), Token.class);
+        Token token = JSON.parseObject(stringRedisTemplate.opsForValue().get(KEY_PREFIX + md5), Token.class);
         //若token不符，则非法
         if (token == null || !tokenStr.equals(token.getAccessToken() + "__" + token.getRefreshToken())) {
             throw new SystemException(ErrorCode.ILLEGAL_CALL);
@@ -65,7 +69,7 @@ public class RedisTokenManager implements TokenManager {
             token = TokenUtil.getInstance().generateToken(token.getUserId());
             tokenStr = token.getAccessToken() + "__" + token.getRefreshToken();
             md5 = MD5Util.MD5(tokenStr);
-            redisCache.set(KEY_PREFIX + md5, token);
+            stringRedisTemplate.opsForValue().set(KEY_PREFIX + md5,  JSON.toJSONString(token, SerializerFeature.WriteClassName));
             return tokenStr;
         } else if (checkAcc.getStatus().getRetCode() == ErrorCode.VERIFY_EXPIRE.getCode() && checkRef.getStatus().getRetCode() == ErrorCode.VERIFY_EXPIRE.getCode()) {
             //返回签名过期错误，要重新登录
@@ -80,7 +84,7 @@ public class RedisTokenManager implements TokenManager {
     @Override
     public Long findUserIdByToken(String tokenStr) {
         String md5 = MD5Util.MD5(tokenStr);
-        Token token = JSON.parseObject(redisCache.get(KEY_PREFIX + md5), Token.class);
+        Token token = JSON.parseObject(stringRedisTemplate.opsForValue().get(KEY_PREFIX + md5), Token.class);
         if(token == null){
             throw new SystemException(ErrorCode.DATA_NULL_ERROR);
         }
@@ -91,6 +95,6 @@ public class RedisTokenManager implements TokenManager {
     @Override
     public void deleteToken(String tokenStr) {
         String md5 = MD5Util.MD5(tokenStr);
-        redisCache.delete(KEY_PREFIX + md5);
+        stringRedisTemplate.delete(KEY_PREFIX + md5);
     }
 }
