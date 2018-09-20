@@ -1,6 +1,7 @@
 package com.miaoshasha.common.code;
 
 /**
+ * 代码生成器
  * @author fengchaojun <br/>
  * -----------------------------
  * Created with IDEA.
@@ -9,4 +10,6 @@ package com.miaoshasha.common.code;
  * -----------------------------
  */
 public class GenerateCode {
+
+
 }

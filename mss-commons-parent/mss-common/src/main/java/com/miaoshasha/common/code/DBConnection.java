@@ -1,7 +1,10 @@
 package com.miaoshasha.common.code;
 
+import java.sql.*;
+
 /**
  * 数据库连接
+ *
  * @author fengchaojun <br/>
  * -----------------------------
  * Created with IDEA.
@@ -9,7 +12,7 @@ package com.miaoshasha.common.code;
  * Time：18:11
  * -----------------------------
  */
-public class DBConection {
+public class DBConnection {
 
     private final static String jdbcUrl = "jdbc:mysql://59.110.159.115:3306/mssdb?characterEncoding=utf8";
 
@@ -17,8 +20,54 @@ public class DBConection {
 
     private final static String username = "root";
 
-    private final static String password = "root";
+    private final static String password = "1qaz!QAZ";
 
 
+    /**
+     * 获取jdbc连接
+     *
+     * @return
+     */
+    public static Connection getConnection() {
+        Connection connection = null;
+        try {
+            Class.forName(driverClassName);
+            connection = DriverManager.getConnection(jdbcUrl, username, password);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return connection;
+    }
+
+
+    public void close(Connection connection) {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void close(ResultSet resultSet, Statement statement, Connection connection) {
+
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
