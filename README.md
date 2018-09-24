@@ -11,7 +11,7 @@ mss-product
 ├    ├── mss-eureka-service -- 注册中心[9001-9009]
 ├    ├── mss-gateway-service -- zuul网关[9010]，
 ├    ├── mss-msgcenter-service -- 消息中心[9020]
-├    └── mss-logcenter-service -- 日志中心[9030]，
+├    └── mss-logcenter-service -- 日志中心[9030]
 ├── mss-services-parent  -- 微服务业务模块 
 ├    ├── mss-base-service -- 基础服务 [8001]
 ├    ├── mss-order-service -- 订单中心 [8002]
