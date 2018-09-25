@@ -18,6 +18,7 @@ public enum  SqlTypeEnum implements BaseEnum<String> {
     BLOB("BLOB","byte[]"),
     CLOB("CLOB","byte[]"),
     TEXT("TEXT","String"),
+    INT("INT","Integer"),
     INTEGER("INTEGER","Integer"),
     BIGINT("BIGINT","Long"),
     TINYINT("TINYINT","Boolean"),

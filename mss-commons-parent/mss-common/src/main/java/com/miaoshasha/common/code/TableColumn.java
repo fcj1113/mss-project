@@ -3,6 +3,7 @@ package com.miaoshasha.common.code;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author fengchaojun <br/>

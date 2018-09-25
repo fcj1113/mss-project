@@ -5,7 +5,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 获取表结构信息
@@ -20,6 +22,8 @@ public class DBMetaData {
     private Connection connection;
     private DatabaseMetaData databaseMetaData;
 
+    public static final String COLUMNLIST = "columnList";
+    public static final String PKLIST = "pkList";
     public DBMetaData() {
         connection = DBConnection.getConnection();
         try {
@@ -33,16 +37,54 @@ public class DBMetaData {
         return this.databaseMetaData;
     }
 
+    public void close(ResultSet resultSet){
+        DBConnection.close(resultSet,connection);
+    }
     /**
-     * 获取表结构信息
+     * 获取表字段结构信息
      * @param tableName
      * @return
      * @throws SQLException
      */
-    public List<TableColumn> getTableColumn(String tableName) throws SQLException {
-        List<TableColumn> list = new ArrayList<>();
+    public Map<String ,List<TableColumn>> getTableColumn(String tableName) throws SQLException {
+        Map<String ,List<TableColumn>> map = new HashMap<>();
 
         ResultSet resultSet = databaseMetaData.getColumns(null, "%", tableName, "%");
+        List<TableColumn> list = tableColumn(resultSet);
+
+        map.put(COLUMNLIST,list);
+        List<TableColumn> pkList = getTablePk(tableName);
+        map.put(PKLIST,pkList);
+
+        close(resultSet);
+        return map;
+    }
+
+    /**
+     * 获取主键信息
+     * @param tableName
+     * @return
+     * @throws SQLException
+     */
+    private List<TableColumn> getTablePk(String tableName) throws SQLException{
+
+        ResultSet resultSet = databaseMetaData.getPrimaryKeys(null, null, tableName);
+        List<TableColumn> list = new ArrayList<>();
+        while (resultSet.next()) {
+            String columnName = resultSet.getString("COLUMN_NAME");//列名
+            short keySeq = resultSet.getShort("KEY_SEQ");//序列号(主键内值1表示第一列的主键，值2代表主键内的第二列)
+            String pkName = resultSet.getString("PK_NAME"); //主键名称
+//            System.out.println("------------pkName="+pkName+"-------------columnName="+columnName);
+            TableColumn tableColumn = new TableColumn();
+            tableColumn.setColumnName(columnName);
+            list.add(tableColumn);
+        }
+        return list;
+    }
+
+
+    private List<TableColumn> tableColumn( ResultSet resultSet) throws SQLException{
+        List<TableColumn> list = new ArrayList<>();
         while (resultSet.next()) {
             TableColumn tableColumn = new TableColumn();
             String columnName = resultSet.getString("COLUMN_NAME");
@@ -62,21 +104,6 @@ public class DBMetaData {
             tableColumn.setColumnSize(columnSize);
             list.add(tableColumn);
         }
-
-        DBConnection.close(resultSet,connection);
         return list;
-    }
-
-
-    public static void main(String[] args) {
-        DBMetaData dbMetaData = new DBMetaData();
-        try {
-            List<TableColumn> list = dbMetaData.getTableColumn("product_detail");
-            for (TableColumn tableColumn : list) {
-                System.out.println("------------" + tableColumn.getColumnName() + "-------------"+tableColumn.getTypeName());
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
