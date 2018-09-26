@@ -34,34 +34,36 @@ import java.util.Map;
 public class GenerateCode {
 
 
+
+    public static final String JAVA_EXT = ".java";
+    public static final String COMMON_BASE = "com.miaoshasha.common.base";
+
     /**
      * 项目第一级路径
      */
     private String projectPath;
-    public static final String JAVA_EXT = ".java";
-    public static final String COMMON_BASE = "com.miaoshasha.common.base";
+    private String entityPackage; //实体类包名
+    private String mapperPackage; //mapper接口类包名
+    private String mapperXmlPath; //mapperXML路径
+    private String servicePackage; //service接口类包名
+    private String controllerPackage; //controller接口类包名
 
-    private String entityPackage;
-    private String mapperPackage;
-    private String mapperXmlPath;
-    private String servicePackage;
 
     /**
-     * @param projectPath    项目第一级路径
-     * @param entityPackage  实体类包名
-     * @param mapperPackage  mapper接口类包名
-     * @param mapperXmlPath  mapperXML路径
-     * @param servicePackage service接口类包名
+     *
+     * @param packageBuilder
      */
-    public GenerateCode(String projectPath,String mapperXmlPath, String entityPackage, String mapperPackage,  String servicePackage) {
+    public GenerateCode(PackageBuilder packageBuilder) {
 
-        this.servicePackage = servicePackage;
-        this.projectPath = projectPath;
-        this.entityPackage = entityPackage;
-        this.mapperPackage = mapperPackage;
-        this.mapperXmlPath = mapperXmlPath;
-
+        this.servicePackage = packageBuilder.getServicePackage();
+        this.projectPath = packageBuilder.getProjectPath();
+        this.entityPackage = packageBuilder.getEntityPackage();
+        this.mapperPackage = packageBuilder.getMapperPackage();
+        this.mapperXmlPath = packageBuilder.getMapperXmlPath();
+        this.controllerPackage = packageBuilder.getControllerPackage();
     }
+
+
 
 
     /**
@@ -382,16 +384,23 @@ public class GenerateCode {
 
     }
 
-    public void createController() {
+    /**
+     * 创建controller
+     */
+    public void createController(String javaSourcePath, String tableName) {
+        String className = className(tableName);
 
     }
 
     public static void main(String[] args) {
-        GenerateCode generateCode = new GenerateCode("D:\\temp\\mss-project\\",
-                "mss-services-parent\\mss-base-service\\src\\main\\resources\\mapper\\",
-                "com.miaoshasha.common.entity.member",
-                "com.miaoshasha.base.mapper.member",
-                "com.miaoshasha.base.service");
+        PackageBuilder packageBuilder = new PackageBuilder()
+                .setProjectPath("D:\\temp\\mss-project\\")
+                .setMapperXmlPath("mss-services-parent\\mss-base-service\\src\\main\\resources\\mapper\\")
+                .setMapperPackage("com.miaoshasha.base.mapper.member")
+                .setEntityPackage("com.miaoshasha.common.entity.member")
+                .setServicePackage("com.miaoshasha.base.service");
+
+        GenerateCode generateCode = new GenerateCode(packageBuilder);
         generateCode.createEntity("mss-commons-parent\\mss-common-entity\\src\\main\\java\\", "base_member");
 
         generateCode.createMapperXml("base_member");

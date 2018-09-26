@@ -9,7 +9,7 @@ import java.sql.Types;
  * -----------------------------
  * Created with IDEA.
  * Date：2018-09-21
- * Time：18:20
+ * Time：19:20
  * -----------------------------
  */
 public enum  SqlTypeEnum implements BaseEnum<String> {
