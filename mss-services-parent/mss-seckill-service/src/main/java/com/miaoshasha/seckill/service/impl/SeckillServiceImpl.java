@@ -7,6 +7,7 @@ import com.miaoshasha.common.exception.SystemException;
 import com.miaoshasha.common.utils.Sequence;
 import com.miaoshasha.common.utils.SystemClock;
 import com.miaoshasha.redis.lock.DistributedLock;
+import com.miaoshasha.redis.util.RedisCache;
 import com.miaoshasha.seckill.mq.OrderMsgPublisher;
 import com.miaoshasha.seckill.service.PromoService;
 import com.miaoshasha.seckill.service.SeckillService;
