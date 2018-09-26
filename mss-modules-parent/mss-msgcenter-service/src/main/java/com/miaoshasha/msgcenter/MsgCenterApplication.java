@@ -6,7 +6,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * 消息中心，主要为短信，微信等消息发送
+ * 消息中心服务
  * @author：fengchaojun <br/>
  * ===============================
  * Created with IDEA.

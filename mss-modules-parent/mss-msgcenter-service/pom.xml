@@ -11,5 +11,12 @@
     <artifactId>mss-msgcenter-service</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.miaoshasha</groupId>
+            <artifactId>mss-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

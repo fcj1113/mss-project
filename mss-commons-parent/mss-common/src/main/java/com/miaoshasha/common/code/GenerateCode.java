@@ -197,16 +197,19 @@ public class GenerateCode {
         String className = className(tableName);
 
         StringBuffer sb = new StringBuffer();
-        sb.append("package " + mapperPackage + "\n");
+        sb.append("package " + mapperPackage + ";\n");
 
         sb.append("import " + COMMON_BASE + ".BaseMapper;\n");
         sb.append("import " + entityPackage + "." + className + ";\n");
+        sb.append("import org.apache.ibatis.annotations.Mapper;\n");
+
         classComment(sb);
+        sb.append("@Mapper\n");
         sb.append("public interface " + className + "Mapper extends BaseMapper<" + className + "> {\n");
 
         sb.append("}\n");
         try {
-            createJavaFile(javaSourcePath, mapperPackage, className, sb.toString());
+            createJavaFile(javaSourcePath, mapperPackage, className+"Mapper", sb.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -339,7 +342,7 @@ public class GenerateCode {
         String className = className(tableName);
 
         StringBuffer sb = new StringBuffer();
-        sb.append("package " + servicePackage + "\n");
+        sb.append("package " + servicePackage + ";\n");
 
         sb.append("import " + COMMON_BASE + ".BaseService;\n");
         sb.append("import " + entityPackage + "." + className + ";\n");
@@ -366,7 +369,7 @@ public class GenerateCode {
         String className = className(tableName);
 
         StringBuffer sb = new StringBuffer();
-        sb.append("package " + servicePackage + ".impl\n");
+        sb.append("package " + servicePackage + ".impl;\n");
 
         sb.append("import " + COMMON_BASE + ".AbstractBaseService;\n");
         sb.append("import " + servicePackage + "." + className + "Service;\n");
@@ -393,20 +396,21 @@ public class GenerateCode {
     }
 
     public static void main(String[] args) {
+        String tableName = "reliable_message";
         PackageBuilder packageBuilder = new PackageBuilder()
-                .setProjectPath("D:\\temp\\mss-project\\")
-                .setMapperXmlPath("mss-services-parent\\mss-base-service\\src\\main\\resources\\mapper\\")
-                .setMapperPackage("com.miaoshasha.base.mapper.member")
-                .setEntityPackage("com.miaoshasha.common.entity.member")
-                .setServicePackage("com.miaoshasha.base.service");
+                .setProjectPath("D:\\workspace-github-mss\\mss-project\\")
+                .setMapperXmlPath("mss-modules-parent\\mss-msgcenter-service\\src\\main\\resources\\mapper\\")
+                .setMapperPackage("com.miaoshasha.msgcenter.mapper")
+                .setEntityPackage("com.miaoshasha.common.entity.message")
+                .setServicePackage("com.miaoshasha.msgcenter.service");
 
         GenerateCode generateCode = new GenerateCode(packageBuilder);
-        generateCode.createEntity("mss-commons-parent\\mss-common-entity\\src\\main\\java\\", "base_member");
+        generateCode.createEntity("mss-commons-parent\\mss-common-entity\\src\\main\\java\\", tableName);
 
-        generateCode.createMapperXml("base_member");
+        generateCode.createMapperXml(tableName);
 
-        generateCode.createMapper("mss-services-parent\\mss-base-service\\src\\main\\java\\", "base_member");
-        generateCode.createService("mss-services-parent\\mss-base-service\\src\\main\\java\\", "base_member");
+        generateCode.createMapper("mss-modules-parent\\mss-msgcenter-service\\src\\main\\java\\", tableName);
+        generateCode.createService("mss-modules-parent\\mss-msgcenter-service\\src\\main\\java\\", tableName);
 
     }
 

@@ -14,7 +14,7 @@ import java.sql.*;
  */
 public class DBConnection {
 
-    private final static String jdbcUrl = "jdbc:mysql://59.110.159.115:3306/mssdb?characterEncoding=utf8";
+    private final static String jdbcUrl = "jdbc:mysql://59.110.159.115:3306/messagedb?characterEncoding=utf8";
 
     private final static String driverClassName = "com.mysql.jdbc.Driver";
 
