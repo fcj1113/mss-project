@@ -271,14 +271,14 @@ public class GenerateCode {
             sb.append("\t<sql id=\"Base_Column_List\"> \n \t\t\t" + columnStr + "\n\t</sql> \n\n");
 
             //根据主键查询
-            sb.append("\t<select id=\"selectByPrimaryKey\" parameterType=\"java.lang.Integer\" resultType=\"" + absoluteEntityClass + "\">\n");
+            sb.append("\t<select id=\"selectByPrimaryKey\" parameterType=\"java.lang.Long\" resultType=\"" + absoluteEntityClass + "\">\n");
             sb.append("\t\tselect \n");
             sb.append("\t\t<include refid=\"Base_Column_List\" />\n");
             sb.append("\t\tfrom " + tableName + " " + wherePKSql + "\n");
             sb.append("\t</select>\n\n");
 
             //delete
-            sb.append("\t<delete id=\"deleteByPrimaryKey\" parameterType=\"java.lang.Integer\"> \n");
+            sb.append("\t<delete id=\"deleteByPrimaryKey\" parameterType=\"java.lang.Long\"> \n");
             sb.append("\t\tdelete from " + tableName + wherePKSql + "\n");
             sb.append("\t</delete> \n\n");
 

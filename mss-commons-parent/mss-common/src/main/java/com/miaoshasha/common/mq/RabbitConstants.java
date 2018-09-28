@@ -31,4 +31,8 @@ public class RabbitConstants {
     //优惠活动订单路由key
     public static final String ORDER_PROMO_ROUTING_KEY = "order.promo.routing";
 
+
+    //分布式事物exchange
+    public static final String TRANSACTION_EXCHANGE_NAME="transaction.exchange";
+
 }

@@ -5,7 +5,7 @@ package com.miaoshasha.common.utils;
  */
 public class GlobalConstants {
 
-	public static final int PAGE_SIZE = 10 ;//默认分页条数
+	public static final int DEFAULT_PAGE_SIZE = 20 ;//默认分页条数
 	public static final int PWD_ERROR_MAX = 5 ;//密码错误次数最大值
 
 	/**

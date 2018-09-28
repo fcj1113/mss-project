@@ -18,11 +18,8 @@ import java.util.Date;
 @Data
 public class ReliableMessage extends AbstractBaseEntity {
 
-		/**主键ID*/ 
-		private Long pid ;
-
 		/**消息ID*/ 
-		private String messageId ;
+		private Long messageId ;
 
 		/**消息内容*/ 
 		private String messageBody ;
@@ -30,8 +27,11 @@ public class ReliableMessage extends AbstractBaseEntity {
 		/**消息数据类型*/ 
 		private String messageDataType ;
 
-		/**消费队列*/ 
+		/**MQ消费队列*/
 		private String consumerQueue ;
+
+		/**MQ路由键值*/
+		private String routingKey;
 
 		/**消息重发次数*/ 
 		private Integer messageSendTimes ;
@@ -65,7 +65,7 @@ public class ReliableMessage extends AbstractBaseEntity {
 
 		@Override
 		public Long getId() {
- 			return this.pid;
+ 			return this.messageId;
 		}
 
 }

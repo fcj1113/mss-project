@@ -4,14 +4,10 @@ import com.miaoshasha.common.utils.GlobalConstants;
 
 import java.util.List;
 
-
 /**
  * 分页类
- * @author liuzd
- * @version 1.0 2011-05-12
  * @param <T>
- * @since JDK1.5
- * */
+ */
 public class Page<T> implements java.io.Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -19,8 +15,8 @@ public class Page<T> implements java.io.Serializable{
 	private Boolean hasPrePage;
 	//后一页
 	private Boolean hasNextPage;
-	//每页显示多少条:默认10条
-	private int pageSize = GlobalConstants.PAGE_SIZE;
+	//每页显示多少条:默认20条
+	private int pageSize = GlobalConstants.DEFAULT_PAGE_SIZE;
 	//总页数
 	private Long totalPage;
 	//当前第多少页:默认第1页
@@ -65,7 +61,7 @@ public class Page<T> implements java.io.Serializable{
 	 * */
 	private Long getTotalPage(Long totalRecords) {
 	     Long totalPage = 0L;	 
-	     pageSize = pageSize < 10 ? GlobalConstants.PAGE_SIZE : pageSize;
+	     pageSize = pageSize < GlobalConstants.DEFAULT_PAGE_SIZE ? GlobalConstants.DEFAULT_PAGE_SIZE : pageSize;
 	     if (totalRecords % pageSize == 0)
 	       totalPage = totalRecords / pageSize;
 	     else {
@@ -97,7 +93,7 @@ public class Page<T> implements java.io.Serializable{
 	}
 
 	public int getPageSize() {
-		this.pageSize = pageSize < 10 ? GlobalConstants.PAGE_SIZE : pageSize;
+		this.pageSize = pageSize < GlobalConstants.DEFAULT_PAGE_SIZE ? GlobalConstants.DEFAULT_PAGE_SIZE : pageSize;
 		return this.pageSize;
 	}
 

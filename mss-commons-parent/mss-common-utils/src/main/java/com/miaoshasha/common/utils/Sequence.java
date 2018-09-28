@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * 基于Twitter的Snowflake算法实现分布式高效有序ID(sequence)
@@ -119,7 +120,7 @@ public class Sequence {
      *
      * @return
      */
-    private Long generateKey() {
+    private Long nextId() {
         long timestamp = this.timeGen();
 
         // 闰秒：如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
@@ -148,16 +149,9 @@ public class Sequence {
                 timestamp = this.tilNextMillis(lastTimestamp);
             }
         } else {
-            // 时间戳改变，毫秒内序列重置
-//            if(numberSwitch){
-//                sequence = 1L;
-//                numberSwitch = false ;
-//            }else{
-//                sequence = 0L;
-//                numberSwitch = true ;
-//            }
 
-            sequence = 0L;
+            //随机1-3，防止夸毫秒全是偶数
+            sequence = ThreadLocalRandom.current().nextLong(1, 3);;
 
         }
 
@@ -203,33 +197,6 @@ public class Sequence {
         }
     }
 
-    private List<Long> idPool = new ArrayList<>();
-    /**预置的id数量**/
-    private final int preset = 1000 ;
 
-    public void putId(){
-        System.out.println("------------重新补充-------------");
-        for (int i = 0; i < preset ; i++) {
-            long id = this.generateKey();
-            idPool.add(id);
-        }
-    }
-
-
-    public synchronized long nextId(){
-        //低于10个时，重新获取
-        if(idPool.size()<=10 ){
-            putId();
-        }
-        long id = idPool.get(0);
-
-        if(id == 0) {
-            id = this.generateKey();
-        }else{
-            idPool.remove(0);
-        }
-
-        return id;
-    }
 
 }

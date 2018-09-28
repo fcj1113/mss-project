@@ -2,35 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.miaoshasha.msgcenter.mapper.ReliableMessageMapper">
     <sql id="Base_Column_List">
- 			pid,message_id,message_body,message_data_type,consumer_queue,message_send_times,already_dead,status,create_time,update_time,create_user,update_user,notes,version,biz_unique_id
+ 			message_id,message_body,message_data_type,consumer_queue,routing_key,message_send_times,already_dead,status,create_time,update_time,create_user,update_user,notes,version,biz_unique_id
 	</sql>
 
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long"
             resultType="com.miaoshasha.common.entity.message.ReliableMessage">
         select
         <include refid="Base_Column_List"/>
-        from reliable_message where pid = #{pid}
+        from reliable_message where message_id = #{messageId}
 
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-		delete from reliable_message where pid = #{pid}
-
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from reliable_message where message_id = #{messageId}
 	</delete>
 
-    <insert id="insert" parameterType="com.miaoshasha.common.entity.message.ReliableMessage" keyProperty="pid"
+    <insert id="insert" parameterType="com.miaoshasha.common.entity.message.ReliableMessage" keyProperty="messageId"
             useGeneratedKeys="true">
-		  insert into reliable_message ( pid,message_id,message_body,message_data_type,consumer_queue,message_send_times,already_dead,status,create_time,update_time,create_user,update_user,notes,version,biz_unique_id)values(#{pid},#{messageId},#{messageBody},#{messageDataType},#{consumerQueue},#{messageSendTimes},#{alreadyDead},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser},#{notes},#{version},#{bizUniqueId})
+		  insert into reliable_message
+		  ( message_id,message_body,message_data_type,consumer_queue,routing_key,message_send_times,already_dead,status,create_time,
+		  update_time,create_user,update_user,notes,version,biz_unique_id)
+		  values
+		  (#{messageId},#{messageBody},#{messageDataType},#{consumerQueue},#{routingKey},#{messageSendTimes},#{alreadyDead},#{status},
+		  #{createTime},#{updateTime},#{createUser},#{updateUser},#{notes},#{version},#{bizUniqueId})
  	</insert>
 
-    <insert id="insertSelective" parameterType="com.miaoshasha.common.entity.message.ReliableMessage">
+    <insert id="insertSelective" parameterType="com.miaoshasha.common.entity.message.ReliableMessage"
+            keyProperty="messageId"
+            useGeneratedKeys="true">
         insert into reliable_message
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="pid != null">pid,</if>
             <if test="messageId != null">message_id,</if>
             <if test="messageBody != null">message_body,</if>
             <if test="messageDataType != null">message_data_type,</if>
             <if test="consumerQueue != null">consumer_queue,</if>
+            <if test="routingKey != null">routing_key,</if>
             <if test="messageSendTimes != null">message_send_times,</if>
             <if test="alreadyDead != null">already_dead,</if>
             <if test="status != null">status,</if>
@@ -43,11 +49,11 @@
             <if test="bizUniqueId != null">biz_unique_id,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="pid != null">#{pid},</if>
             <if test="messageId != null">#{messageId},</if>
             <if test="messageBody != null">#{messageBody},</if>
             <if test="messageDataType != null">#{messageDataType},</if>
             <if test="consumerQueue != null">#{consumerQueue},</if>
+            <if test="routingKey != null">#{routingKey},</if>
             <if test="messageSendTimes != null">#{messageSendTimes},</if>
             <if test="alreadyDead != null">#{alreadyDead},</if>
             <if test="status != null">#{status},</if>
@@ -62,14 +68,14 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.miaoshasha.common.entity.message.ReliableMessage">update
+    <update id="updateByPrimaryKeySelective" parameterType="com.miaoshasha.common.entity.message.ReliableMessage">
+        update
         reliable_message
         <set>
-            <if test="pid != null">pid=#{pid},</if>
-            <if test="messageId != null">message_id=#{messageId},</if>
             <if test="messageBody != null">message_body=#{messageBody},</if>
             <if test="messageDataType != null">message_data_type=#{messageDataType},</if>
             <if test="consumerQueue != null">consumer_queue=#{consumerQueue},</if>
+            <if test="routingKey != null">routing_key=#{routingKey},</if>
             <if test="messageSendTimes != null">message_send_times=#{messageSendTimes},</if>
             <if test="alreadyDead != null">already_dead=#{alreadyDead},</if>
             <if test="status != null">status=#{status},</if>
@@ -81,16 +87,40 @@
             <if test="version != null">version=#{version},</if>
             <if test="bizUniqueId != null">biz_unique_id=#{bizUniqueId},</if>
         </set>
-        where pid = #{pid}
+        where message_id = #{messageId}
     </update>
 
     <update id="updateByPrimaryKey" parameterType="com.miaoshasha.common.entity.message.ReliableMessage">
 		update reliable_message
 		set
-        pid=#{pid},message_id=#{messageId},message_body=#{messageBody},message_data_type=#{messageDataType},
-        consumer_queue=#{consumerQueue},message_send_times=#{messageSendTimes},already_dead=#{alreadyDead},
-        status=#{status},create_time=#{createTime},update_time=#{updateTime},create_user=#{createUser},
-        update_user=#{updateUser},notes=#{notes},version=#{version},biz_unique_id=#{bizUniqueId}
-		where pid = #{pid}
+		message_body=#{messageBody},
+		message_data_type=#{messageDataType},
+        consumer_queue=#{consumerQueue},
+        routing_key=#{routingKey},
+        message_send_times=#{messageSendTimes},
+        already_dead=#{alreadyDead},
+        status=#{status},
+        update_time=#{updateTime},
+        update_user=#{updateUser},
+        notes=#{notes},
+        version=#{version},
+        biz_unique_id=#{bizUniqueId}
+		where message_id = #{messageId}
 	</update>
+
+    <delete id="deleteMessageByBizId">
+		delete from reliable_message where biz_unique_id=#{bizUniqueId}
+    </delete>
+
+    <select id="getDeadMessageByQueue" resultType="com.miaoshasha.common.entity.message.ReliableMessage"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from reliable_message where consumer_queue=#{consumerQueue}
+        and already_dead = 'Y' limit #{startIndex},#{pageSize} order by create_time
+    </select>
+
+    <select id="getCountDeadMessageByQueue" resultType="java.lang.Long" >
+         select count(*) from reliable_message where consumer_queue=#{consumerQueue} and already_dead = 'Y'
+    </select>
 </mapper>

@@ -17,23 +17,23 @@ public abstract class AbstractBaseService<M extends BaseMapper<E>, E extends Bas
     /**
      * 保存对象
      *
-     * @param e
+     * @param entity
      * @return 返回id
      */
     @Override
-    public long save(E e) {
+    public long save(E entity) {
         //若是AbstractBaseEntity 则记录时间
-        if(e instanceof AbstractBaseEntity){
-            AbstractBaseEntity baseEntity = (AbstractBaseEntity)e;
+        if(entity instanceof AbstractBaseEntity){
+            AbstractBaseEntity baseEntity = (AbstractBaseEntity)entity;
             Timestamp current = new Timestamp(System.currentTimeMillis());
-            if(baseEntity.getId() == null){
+            if(baseEntity.getId() == null){//不存在id时，记录为insert时间
                 baseEntity.setCreateTime(current);
             }
             baseEntity.setUpdateTime(current);
         }
-        int res = mapper.insert(e);
+        int res = mapper.insert(entity);
         if (res > 0) {
-            return e.getId();
+            return entity.getId();
         }
         return res;
     }
@@ -41,17 +41,17 @@ public abstract class AbstractBaseService<M extends BaseMapper<E>, E extends Bas
     /**
      * 修改对象
      *
-     * @param e
+     * @param entity
      * @return
      */
     @Override
-    public int modify(E e) {
-        if(e instanceof AbstractBaseEntity){
-            AbstractBaseEntity baseEntity = (AbstractBaseEntity)e;
+    public int modify(E entity) {
+        if(entity instanceof AbstractBaseEntity){
+            AbstractBaseEntity baseEntity = (AbstractBaseEntity)entity;
             Timestamp current = new Timestamp(System.currentTimeMillis());
             baseEntity.setUpdateTime(current);
         }
-        return mapper.updateByPrimaryKey(e);
+        return mapper.updateByPrimaryKey(entity);
     }
 
     /**
@@ -69,12 +69,12 @@ public abstract class AbstractBaseService<M extends BaseMapper<E>, E extends Bas
     /**
      * 根据查询条件查询所有数据
      *
-     * @param e
+     * @param entity
      * @return
      */
     @Override
-    public List<E> findAll(E e) {
-        return mapper.selectAll(e);
+    public List<E> findAll(E entity) {
+        return mapper.selectAll(entity);
     }
 
 
