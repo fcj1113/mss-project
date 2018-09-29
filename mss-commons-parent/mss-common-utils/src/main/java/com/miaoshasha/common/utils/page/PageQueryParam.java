@@ -32,4 +32,12 @@ public class PageQueryParam {
      */
     private String sort;
 
+//    long startIndex = (pageQueryParam.getPageNo() - 1) * pageQueryParam.getPageSize();
+//    int pageSize = pageQueryParam.getPageSize();
+
+    private long startIndex ;
+
+    public void setStartIndex(){
+        startIndex = (getPageNo()-1) * getPageSize();
+    }
 }

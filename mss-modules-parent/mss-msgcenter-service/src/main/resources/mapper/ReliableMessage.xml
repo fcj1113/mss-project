@@ -117,10 +117,44 @@
         select
         <include refid="Base_Column_List"/>
         from reliable_message where consumer_queue=#{consumerQueue}
-        and already_dead = 'Y' limit #{startIndex},#{pageSize} order by create_time
+        and already_dead = 'Y' order by create_time limit #{startIndex},#{pageSize}
     </select>
 
-    <select id="getCountDeadMessageByQueue" resultType="java.lang.Long" >
+    <select id="getCountDeadMessageByQueue" resultType="java.lang.Long">
          select count(*) from reliable_message where consumer_queue=#{consumerQueue} and already_dead = 'Y'
+    </select>
+
+    <select id="getListTimeOut" resultType="com.miaoshasha.common.entity.message.ReliableMessage">
+      select
+      <include refid="Base_Column_List"/>
+        from reliable_message
+        <where>
+            <if test="createTime !=null and createTime !='' ">
+                AND create_time &lt;= #{createTime}
+            </if>
+            <if test="alreadyDead !=null and alreadyDead !=''">
+                AND already_dead = #{alreadyDead}
+            </if>
+            <if test="status != null and status!=''">
+                AND status=#{status}
+            </if>
+        </where>
+        order by create_time
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <select id="getCountTimeOut" resultType="java.lang.Long">
+        select count(*) from reliable_message
+        <where>
+            <if test="createTime !=null and createTime !='' ">
+                AND create_time &lt;= #{createTime}
+            </if>
+            <if test="alreadyDead !=null and alreadyDead !=''">
+                AND already_dead = #{alreadyDead}
+            </if>
+            <if test="status != null and status!=''">
+                AND status=#{status}
+            </if>
+        </where>
     </select>
 </mapper>

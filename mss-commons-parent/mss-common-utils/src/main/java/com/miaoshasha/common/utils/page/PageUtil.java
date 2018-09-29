@@ -16,7 +16,7 @@ public class PageUtil {
 	 * @param <T>
 	 * @param <T>
 	 */
-	public static <T> Page<T> initPage(HttpServletRequest request, Long totalCount, int pageSize) {
+	public static <T> PageResult<T> initPage(HttpServletRequest request, Long totalCount, int pageSize) {
 		long pageNo = 1;// 页码
 		String pageNoParam = request.getParameter("pageNo");
 		if (pageNoParam != null && !"".equals(pageNoParam)) {
@@ -25,14 +25,14 @@ public class PageUtil {
 			pageNo = 1;// 页码，默认是第一页
 		}
 
-		Page<T> page = new Page<T>(pageSize, totalCount);
-		page.setCurrentPage(pageNo);
+		PageResult<T> pageResult = new PageResult<T>(pageSize, totalCount);
+		pageResult.setCurrentPage(pageNo);
 
-		return page;
+		return pageResult;
 	}
 
-	public static <T> Page<T> initPage(HttpServletRequest request, Long totalCount) {
-		return initPage(request, totalCount, GlobalConstants.PAGE_SIZE);
+	public static <T> PageResult<T> initPage(HttpServletRequest request, Long totalCount) {
+		return initPage(request, totalCount, GlobalConstants.DEFAULT_PAGE_SIZE);
 	}
 
 }

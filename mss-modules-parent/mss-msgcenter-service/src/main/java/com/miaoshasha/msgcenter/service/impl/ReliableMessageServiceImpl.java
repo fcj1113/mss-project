@@ -1,7 +1,7 @@
 package com.miaoshasha.msgcenter.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.db.PageResult;
+import cn.hutool.core.date.DateUtil;
 import com.miaoshasha.common.base.AbstractBaseService;
 import com.miaoshasha.common.enums.ErrorCode;
 import com.miaoshasha.common.enums.YesOrNo;
@@ -9,7 +9,7 @@ import com.miaoshasha.common.exception.SystemException;
 import com.miaoshasha.common.mq.CommonMsgPublisher;
 import com.miaoshasha.common.mq.RabbitConstants;
 import com.miaoshasha.common.utils.GlobalConstants;
-import com.miaoshasha.common.utils.page.Page;
+import com.miaoshasha.common.utils.page.PageResult;
 import com.miaoshasha.common.utils.page.PageQueryParam;
 import com.miaoshasha.msgcenter.enums.MessageStatusEnum;
 import com.miaoshasha.msgcenter.mapper.ReliableMessageMapper;
@@ -43,6 +43,11 @@ public class ReliableMessageServiceImpl extends AbstractBaseService<ReliableMess
     @Autowired
     private CommonMsgPublisher commonMsgPublisher;
 
+    /**
+     * 默认消息的超时时间100秒
+     */
+    public static final int MESSAGE_TIMEOUT = 100;
+
     @Transactional
     @Override
     public ReliableMessage preSaveMessage(ReliableMessage reliableMessage) {
@@ -57,7 +62,7 @@ public class ReliableMessageServiceImpl extends AbstractBaseService<ReliableMess
 
     @Transactional
     @Override
-    public void confirmAndSendMessage(Long messageId) {
+    public int confirmAndSendMessage(Long messageId) {
         ReliableMessage reliableMessage = this.findById(messageId);
         if (reliableMessage == null) {
             throw new SystemException(ErrorCode.DATA_NULL_ERROR);
@@ -65,15 +70,17 @@ public class ReliableMessageServiceImpl extends AbstractBaseService<ReliableMess
 
         reliableMessage.setStatus(MessageStatusEnum.SENDING.name());
         reliableMessage.setUpdateTime(new Date());
-        this.modify(reliableMessage);
+        int res = this.modify(reliableMessage);
 
         //发送消息
         commonMsgPublisher.send(reliableMessage, RabbitConstants.TRANSACTION_EXCHANGE_NAME, reliableMessage.getConsumerQueue(), reliableMessage.getRoutingKey());
+
+        return res;
     }
 
     @Transactional
     @Override
-    public void saveAndSendMessage(ReliableMessage reliableMessage) {
+    public Long saveAndSendMessage(ReliableMessage reliableMessage) {
         this.checkMessage(reliableMessage);
         reliableMessage.setStatus(MessageStatusEnum.WAIT_VERIFY.name());
         reliableMessage.setAlreadyDead(YesOrNo.N.name());
@@ -83,6 +90,7 @@ public class ReliableMessageServiceImpl extends AbstractBaseService<ReliableMess
         //发送消息
         commonMsgPublisher.send(reliableMessage, RabbitConstants.TRANSACTION_EXCHANGE_NAME, reliableMessage.getConsumerQueue(), reliableMessage.getRoutingKey());
 
+        return reliableMessage.getMessageId();
     }
 
     @Override
@@ -93,26 +101,27 @@ public class ReliableMessageServiceImpl extends AbstractBaseService<ReliableMess
 
     @Transactional
     @Override
-    public void reSendMessage(ReliableMessage reliableMessage) {
+    public int reSendMessage(ReliableMessage reliableMessage) {
         //检查消息数据的完整性
         this.checkMessage(reliableMessage);
 
         //更新消息发送次数
         reliableMessage.setMessageSendTimes(reliableMessage.getMessageSendTimes() + 1);
         reliableMessage.setUpdateTime(new Date());
-        this.modify(reliableMessage);
+        int res = this.modify(reliableMessage);
 
         //发送消息
         commonMsgPublisher.send(reliableMessage, RabbitConstants.TRANSACTION_EXCHANGE_NAME, reliableMessage.getConsumerQueue(), reliableMessage.getRoutingKey());
+        return res;
     }
 
     @Override
-    public void reSendMessageByMessageId(Long messageId) {
+    public int reSendMessageByMessageId(Long messageId) {
         ReliableMessage reliableMessage = this.findById(messageId);
         if (reliableMessage == null) {
             throw new SystemException(ErrorCode.DATA_NULL_ERROR);
         }
-        this.reSendMessage(reliableMessage);
+        return this.reSendMessage(reliableMessage);
     }
 
     @Transactional
@@ -130,14 +139,14 @@ public class ReliableMessageServiceImpl extends AbstractBaseService<ReliableMess
 
     @Transactional
     @Override
-    public void deleteMessageByMessageId(Long messageId) {
-        this.removeById(messageId);
+    public int deleteMessageByMessageId(Long messageId) {
+        return this.removeById(messageId);
     }
 
     @Transactional
     @Override
-    public void deleteMessageByBizId(Long bizId) {
-        reliableMessageMapper.deleteMessageByBizId(bizId);
+    public int deleteMessageByBizId(Long bizId) {
+        return reliableMessageMapper.deleteMessageByBizId(bizId);
     }
 
     /**
@@ -150,11 +159,11 @@ public class ReliableMessageServiceImpl extends AbstractBaseService<ReliableMess
     public void reSendAllDeadMessageByQueueName(String queueName) {
 
         //只查询第一页,数量是500,
-        int pageSize = 500 ;
+        int pageSize = 500;
         PageQueryParam pageQueryParam = new PageQueryParam();
         pageQueryParam.setPageNo(1L);
         pageQueryParam.setPageSize(GlobalConstants.DEFAULT_PAGE_SIZE);
-        Page<ReliableMessage> reliableMessagePageList = this.listDeadMessageByQueue(queueName, pageQueryParam);
+        PageResult<ReliableMessage> reliableMessagePageList = this.listDeadMessageByQueue(queueName, pageQueryParam);
 
         if (CollectionUtil.isEmpty(reliableMessagePageList.getList())) {
             return;
@@ -166,7 +175,7 @@ public class ReliableMessageServiceImpl extends AbstractBaseService<ReliableMess
     }
 
     @Override
-    public Page<ReliableMessage> listDeadMessageByQueue(String queueName, PageQueryParam pageQueryParam) {
+    public PageResult<ReliableMessage> listDeadMessageByQueue(String queueName, PageQueryParam pageQueryParam) {
 
         long totalCount = reliableMessageMapper.getCountDeadMessageByQueue(queueName);
 
@@ -174,20 +183,48 @@ public class ReliableMessageServiceImpl extends AbstractBaseService<ReliableMess
         int pageSize = pageQueryParam.getPageSize();
         List<ReliableMessage> reliableMessageList = reliableMessageMapper.getDeadMessageByQueue(queueName, startIndex, pageSize);
 
-        Page<ReliableMessage> page = new Page<>(pageQueryParam.getPageSize(), totalCount);
-        page.setList(reliableMessageList);
-        page.setCurrentPage(pageQueryParam.getPageNo());
-        return page;
+        PageResult<ReliableMessage> pageResult = new PageResult<>(pageQueryParam.getPageSize(), totalCount);
+        pageResult.setList(reliableMessageList);
+        pageResult.setCurrentPage(pageQueryParam.getPageNo());
+        return pageResult;
+    }
+
+    /**
+     * 分页获取待发送超时的数据，默认2分钟超时
+     */
+    @Override
+    public PageResult<ReliableMessage> listPageWaitConfimTimeOut(PageQueryParam pageParam) {
+        //往前偏移超时时间
+        String dateTime = DateUtil.formatDateTime(DateUtil.offsetSecond(new Date(), -MESSAGE_TIMEOUT));
+
+        List<ReliableMessage> reliableMessageList = reliableMessageMapper.getListTimeOut(dateTime,
+                MessageStatusEnum.WAIT_VERIFY.name(), YesOrNo.Y.name(), pageParam.getStartIndex(), pageParam.getPageSize());
+
+
+        long totalCount = reliableMessageMapper.getCountTimeOut(dateTime, MessageStatusEnum.WAIT_VERIFY.name(), YesOrNo.Y.name());
+
+        PageResult<ReliableMessage> pageResult = new PageResult<>(pageParam.getPageSize(), totalCount);
+        pageResult.setList(reliableMessageList);
+        pageResult.setCurrentPage(pageParam.getPageNo());
+
+        return pageResult;
     }
 
     @Override
-    public PageResult<ReliableMessage> listPagetWaitConfimTimeOutMessages(PageQueryParam pageParam) {
-        return null;
-    }
+    public PageResult<ReliableMessage> listPageSendingTimeOut(PageQueryParam pageParam) {
+        //往前偏移超时时间
+        String dateTime = DateUtil.formatDateTime(DateUtil.offsetSecond(new Date(), -MESSAGE_TIMEOUT));
+        List<ReliableMessage> reliableMessageList = reliableMessageMapper.getListTimeOut(dateTime,
+                MessageStatusEnum.SENDING.name(), "", pageParam.getStartIndex(), pageParam.getPageSize());
 
-    @Override
-    public PageResult<ReliableMessage> listPageSendingTimeOutMessages(PageQueryParam pageParam) {
-        return null;
+
+        long totalCount = reliableMessageMapper.getCountTimeOut(dateTime, MessageStatusEnum.SENDING.name(), "");
+
+        PageResult<ReliableMessage> pageResult = new PageResult<>(pageParam.getPageSize(), totalCount);
+        pageResult.setList(reliableMessageList);
+        pageResult.setCurrentPage(pageParam.getPageNo());
+
+        return pageResult;
     }
 
 

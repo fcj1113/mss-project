@@ -5,6 +5,7 @@ import com.miaoshasha.base.controller.BaseController;
 import com.miaoshasha.base.service.user.RoleService;
 import com.miaoshasha.base.service.user.UserService;
 import com.miaoshasha.common.annotation.OpLog;
+import com.miaoshasha.common.api.base.UserControllerApi;
 import com.miaoshasha.common.component.token.TokenManager;
 import com.miaoshasha.common.domain.DataResult;
 import com.miaoshasha.common.dto.user.UserDTO;
@@ -28,7 +29,8 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "UserController", description = "用户服务")
 @RestController
 @RequestMapping(value = "user")
-public class UserController extends BaseController {
+public class UserController extends BaseController implements UserControllerApi {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
@@ -45,7 +47,6 @@ public class UserController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户id", paramType = "path", required = true, dataType = "Long")
     })
-    @RequestMapping(value = "/getInfoById/{userId}")
     @ApiRateLimiter(permitsPerSecond = 1)
     public DataResult<UserDTO> getInfoById(@PathVariable("userId") Long userId) {
         User user = Assert.notNull( userService.findById(userId), "用户信息为空");
@@ -64,7 +65,6 @@ public class UserController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户id", paramType = "path", required = true, dataType = "Long")
     })
-    @RequestMapping(value = "/getRoleByUserId/{userId}")
     public DataResult<Role> getRoleByUserId(@PathVariable("userId") Long userId) {
         return DataResult.success(roleService.getRoleByUserId(userId));
     }
@@ -74,7 +74,6 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "phoneNo", value = "登录手机号码", paramType = "form", required = true, dataType = "String"),
             @ApiImplicitParam(name = "channel", value = "渠道", paramType = "form", required = true, dataType = "Integer")
     })
-    @RequestMapping(value = "/getUserByPhoneNo")
     public DataResult<UserDTO> getUserByPhoneNo(@RequestParam("phoneNo") String phoneNo,
                                                 @RequestParam("channel") Integer channel) {
         User user = userService.getUserByPhoneNo(phoneNo, channel);

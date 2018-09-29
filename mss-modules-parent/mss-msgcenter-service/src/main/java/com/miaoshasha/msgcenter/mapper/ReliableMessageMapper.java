@@ -37,9 +37,31 @@ public interface ReliableMessageMapper extends BaseMapper<ReliableMessage> {
                                                 @Param("pageSize") int pageSize);
 
     /**
+     * 查询队列下所有死亡的消息总数
      *
      * @param consumerQueue
      * @return
      */
     Long getCountDeadMessageByQueue(@Param("consumerQueue") String consumerQueue);
+
+
+    /**
+     * 查询超时的订单
+     * @param createTime
+     * @param status
+     * @param alreadyDead
+     * @param startIndex
+     * @param pageSize
+     * @return
+     */
+    List<ReliableMessage> getListTimeOut(@Param("createTime") String createTime,
+                                         @Param("status") String status,
+                                         @Param("alreadyDead") String alreadyDead,
+                                         @Param("startIndex") long startIndex,
+                                         @Param("pageSize") int pageSize);
+
+    Long getCountTimeOut(@Param("createTime") String createTime,
+                         @Param("status") String status,
+                         @Param("alreadyDead") String alreadyDead);
+
 }

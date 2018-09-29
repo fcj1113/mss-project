@@ -1,9 +1,8 @@
 package com.miaoshasha.msgcenter.service;
 
-import cn.hutool.db.PageResult;
 import com.miaoshasha.common.base.BaseService;
 import com.miaoshasha.common.entity.message.ReliableMessage;
-import com.miaoshasha.common.utils.page.Page;
+import com.miaoshasha.common.utils.page.PageResult;
 import com.miaoshasha.common.utils.page.PageQueryParam;
 
 /**                            
@@ -25,12 +24,12 @@ public interface ReliableMessageService extends BaseService<ReliableMessage> {
     /**
      * 确认并发送消息
      */
-    void confirmAndSendMessage( Long messageId);
+    int confirmAndSendMessage( Long messageId);
 
     /**
      * 存储并发送消息
      */
-    void saveAndSendMessage( ReliableMessage reliableMessage);
+    Long saveAndSendMessage( ReliableMessage reliableMessage);
 
     /**
      * 直接发送消息
@@ -40,12 +39,12 @@ public interface ReliableMessageService extends BaseService<ReliableMessage> {
     /**
      * 重发消息
      */
-    void reSendMessage( ReliableMessage reliableMessage);
+    int reSendMessage( ReliableMessage reliableMessage);
 
     /**
      * 根据messageId重发某条消息
      */
-    void reSendMessageByMessageId( Long messageId);
+    int reSendMessageByMessageId( Long messageId);
 
     /**
      * 将消息标记为死亡消息
@@ -55,12 +54,12 @@ public interface ReliableMessageService extends BaseService<ReliableMessage> {
     /**
      * 根据消息ID删除消息
      */
-    void deleteMessageByMessageId( Long messageId);
+    int deleteMessageByMessageId( Long messageId);
 
     /**
      * 根据业务id删除消息
      */
-    void deleteMessageByBizId( Long bizId);
+    int deleteMessageByBizId( Long bizId);
 
     /**
      * 重发某个消息队列中的全部已死亡的消息.
@@ -73,15 +72,15 @@ public interface ReliableMessageService extends BaseService<ReliableMessage> {
      * @param pageQuery
      * @return
      */
-    Page<ReliableMessage> listDeadMessageByQueue(String queueName,PageQueryParam pageQuery);
+    PageResult<ReliableMessage> listDeadMessageByQueue(String queueName, PageQueryParam pageQuery);
 
     /**
      * 分页获取待发送超时的数据
      */
-    PageResult<ReliableMessage> listPagetWaitConfimTimeOutMessages( PageQueryParam pageParam);
+    PageResult<ReliableMessage> listPageWaitConfimTimeOut(PageQueryParam pageParam);
 
     /**
      * 分页获取发送中超时的数据
      */
-    PageResult<ReliableMessage> listPageSendingTimeOutMessages(PageQueryParam pageParam);
+    PageResult<ReliableMessage> listPageSendingTimeOut(PageQueryParam pageParam);
 }

@@ -15,6 +15,7 @@
         <module>mss-common-entity</module>
         <module>mss-common-utils</module>
         <module>mss-common</module>
+        <module>mss-common-api</module>
     </modules>
 
 

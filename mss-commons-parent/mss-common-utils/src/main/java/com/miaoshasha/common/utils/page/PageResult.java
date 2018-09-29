@@ -8,7 +8,7 @@ import java.util.List;
  * 分页类
  * @param <T>
  */
-public class Page<T> implements java.io.Serializable{
+public class PageResult<T> implements java.io.Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	//前一页
@@ -42,7 +42,7 @@ public class Page<T> implements java.io.Serializable{
 	/**
 	 * 常用,用于计算分页
 	 * */
-	public Page(Long totalRecords){		
+	public PageResult(Long totalRecords){
 		this.totalCount = totalRecords;
 		setTotalPage(getTotalPage(totalRecords));     
 	}
@@ -50,7 +50,7 @@ public class Page<T> implements java.io.Serializable{
 	/**
 	 * 设置每页显示多少条时使用
 	 * */
-	public Page(int pageSize,Long totalRecords){	
+	public PageResult(int pageSize, Long totalRecords){
 		this.pageSize = pageSize;
 		this.totalCount = totalRecords;
 		setTotalPage(getTotalPage(totalRecords));     

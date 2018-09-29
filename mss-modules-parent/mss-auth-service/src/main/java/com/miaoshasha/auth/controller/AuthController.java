@@ -2,6 +2,7 @@ package com.miaoshasha.auth.controller;
 
 import com.miaoshasha.auth.service.AuthService;
 import com.miaoshasha.common.annotation.OpLog;
+import com.miaoshasha.common.api.auth.AuthControllerApi;
 import com.miaoshasha.common.domain.DataResult;
 import com.miaoshasha.common.dto.user.UserDTO;
 import com.miaoshasha.common.enums.OpType;
@@ -19,8 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "AuthController", description = "授权服务")
 @Slf4j
 @RestController
-@RequestMapping(value = "/")
-public class AuthController {
+public class AuthController implements AuthControllerApi {
 
     @Autowired
     private AuthService authService;
@@ -32,7 +32,6 @@ public class AuthController {
             @ApiImplicitParam(name = "password", value = "用户密码", paramType = "form", required = true, dataType = "String"),
             @ApiImplicitParam(name = "channel", value = "渠道", paramType = "form", required = true, dataType = "Integer")
     })
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
     @OpLog(userId = "#phoneNo",notes = "登录",opType = OpType.LOGIN)
     public DataResult<UserDTO> login(@RequestParam("phoneNo") String phoneNo,
                                      @RequestParam("password") String password,
@@ -47,7 +46,6 @@ public class AuthController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "TOKEN", paramType = "form", required = true, dataType = "String")
     })
-    @RequestMapping(value = "/getUserByToken",method = RequestMethod.POST)
     @OpLog(userId = "#phoneNo",notes = "根据token获取登录信息",opType = OpType.LOGIN)
     public DataResult<UserDTO> getUserByToken(@RequestParam("token") String token){
         return DataResult.success(authService.getUserByToken(token));
@@ -57,7 +55,6 @@ public class AuthController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "token", value = "TOKEN", paramType = "form", required = true, dataType = "String")
     })
-    @PostMapping(value = "/verifyToken")
     public DataResult<Boolean> verifyToken(@RequestParam("token") String token){
         return DataResult.success(authService.verifyToken(token));
     }
