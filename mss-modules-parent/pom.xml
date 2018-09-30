@@ -17,6 +17,7 @@
         <module>mss-gateway-service</module>
         <module>mss-msgcenter-service</module>
         <module>mss-logcenter-service</module>
+        <module>mss-msgcenter-task</module>
     </modules>
     <dependencies>
 

@@ -21,6 +21,13 @@
     where pid = #{pid,jdbcType=BIGINT}
   </select>
 
+  <select id="selectProductByOrderId" resultType="com.miaoshasha.common.entity.order.OrderProduct">
+    select
+    <include refid="Base_Column_List" />
+    from order_product
+    where order_id = #{orderId} order by pid
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from order_product
     where pid = #{pid,jdbcType=BIGINT}

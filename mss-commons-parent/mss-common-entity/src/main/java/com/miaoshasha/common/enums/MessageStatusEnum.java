@@ -1,4 +1,4 @@
-package com.miaoshasha.msgcenter.enums;
+package com.miaoshasha.common.enums;
 
 /**
  *
