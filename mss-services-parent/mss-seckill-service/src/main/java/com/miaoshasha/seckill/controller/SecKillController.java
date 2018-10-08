@@ -21,7 +21,6 @@ public class SecKillController extends BaseController {
 
     @RequestMapping("/testSeq")
     public DataResult<String> testSeq(){
-        seckillService.testSeq();
         return DataResult.success("111111111111");
     }
 }

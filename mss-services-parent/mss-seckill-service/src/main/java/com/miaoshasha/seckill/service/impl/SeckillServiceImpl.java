@@ -1,9 +1,13 @@
 package com.miaoshasha.seckill.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.miaoshasha.api.message.ReliableMessageRemoteClient;
 import com.miaoshasha.common.dto.order.PromoDTO;
+import com.miaoshasha.common.entity.message.ReliableMessage;
 import com.miaoshasha.common.entity.store.PromoInfo;
 import com.miaoshasha.common.enums.ErrorCode;
 import com.miaoshasha.common.exception.SystemException;
+import com.miaoshasha.common.mq.RabbitConstants;
 import com.miaoshasha.common.utils.Sequence;
 import com.miaoshasha.common.utils.SystemClock;
 import com.miaoshasha.redis.lock.DistributedLock;
@@ -15,6 +19,7 @@ import com.miaoshasha.seckill.util.CacheConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by fengchaojun on 2018/6/27.
@@ -44,6 +49,10 @@ public class SeckillServiceImpl implements SeckillService {
     @Autowired
     private Sequence sequence;
 
+    @Autowired
+    private ReliableMessageRemoteClient reliableMessageRemoteClient ;
+
+    @Transactional
     @Override
     public void doSecKill(PromoDTO promoDTO) {
         long promoId = promoDTO.getPromoId();
@@ -61,12 +70,18 @@ public class SeckillServiceImpl implements SeckillService {
                 log.debug("新生成订单号：" + orderId);
                 promoDTO.getOrderInfo().setOrderId(orderId);
                 promoDTO.getOrderInfo().setOrderNo("DD" + orderId);
-                orderMsgPublisher.send(promoDTO);
-                //扣除缓存中的库存
+                //orderMsgPublisher.send(promoDTO);
+                ReliableMessage reliableMessage = createMessage(promoDTO);
+
+                //1.预存储消息
+                reliableMessageRemoteClient.preSaveMessage(reliableMessage);
+
+                //2.扣除缓存中的库存，同步更新到redis中，并指定过期时间（失效时间-当前时间）
                 promoInfo.setStockQuantity(stockQuantity - promoDTO.getOrderProduct().getQuantity());
-                //更新库存
-                //同步更新到redis中，并指定过期时间（失效时间-当前时间）
                 redisCache.setForTimeMS(CacheConstant.REDIS_PREFIX + ":" + promoId, promoInfo, (promoInfo.getEndTime() - System.currentTimeMillis()));
+
+                //3.确认并发送消息
+                reliableMessageRemoteClient.confirmAndSendMessage(reliableMessage.getMessageId());
 
             } finally {//释放锁
                 boolean releaseResult = redisDistributedLock.releaseLock(lockKey);
@@ -77,26 +92,15 @@ public class SeckillServiceImpl implements SeckillService {
         }
     }
 
-    @Override
-    public void testSeq() {
-        long promoId = 31;
-        String lockKey = REDIS_PROMO_LOCK + promoId;
-        PromoInfo promoInfo = null;
-        //生成订单号
-//        long orderId = sequence.nextId();
-//        log.debug("新生成订单号：" + orderId);
-        //锁定库存更新并发送消息
-        if (redisDistributedLock.lock(lockKey, TIMEOUT_MILLIS, RETRY_TIMES, SLEEP_MILLIS)) {
-            try {
 
-                long orderId1 = sequence.nextId();
-                log.debug("新生成订单号1：" + orderId1);
-
-            } finally {//释放锁
-                boolean releaseResult = redisDistributedLock.releaseLock(lockKey);
-            }
-
-        }
+    private ReliableMessage createMessage(PromoDTO promoDTO){
+        ReliableMessage reliableMessage = new ReliableMessage();
+        reliableMessage.setMessageId(sequence.nextId());
+        reliableMessage.setBizUniqueId(promoDTO.getOrderInfo().getId());
+        reliableMessage.setMessageBody(JSON.toJSONString(promoDTO));
+        reliableMessage.setConsumerQueue(RabbitConstants.ORDER_PROMO_QUEUE_NAME);
+        reliableMessage.setRoutingKey(RabbitConstants.ORDER_PROMO_ROUTING_KEY);
+        return reliableMessage ;
     }
 
     /**

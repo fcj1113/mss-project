@@ -19,7 +19,6 @@ public interface ReliableMessageHandler {
 
     /**
      * 处理[WAIT_VERIFY]状态的消息
-     * @param reliableMessageMap
      */
     public void handleWaitingConfirmTimeOutMessages();
 
@@ -27,7 +26,6 @@ public interface ReliableMessageHandler {
     /**
      * 处理[SENDING]状态的消息
      *
-     * @param reliableMessageMap
      */
     public void handleSendingTimeOutMessages();
 }

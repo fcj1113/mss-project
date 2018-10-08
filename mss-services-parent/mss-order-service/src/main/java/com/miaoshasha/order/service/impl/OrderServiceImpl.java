@@ -1,5 +1,6 @@
 package com.miaoshasha.order.service.impl;
 
+import com.miaoshasha.api.message.ReliableMessageRemoteClient;
 import com.miaoshasha.common.base.AbstractBaseService;
 import com.miaoshasha.common.dto.order.PromoDTO;
 import com.miaoshasha.common.entity.order.OrderInfo;
@@ -23,33 +24,35 @@ public class OrderServiceImpl extends AbstractBaseService<OrderInfoMapper, Order
     @Autowired
     private OrderProductService orderProductService;
 
-    @Transactional
+    @Autowired
+    private ReliableMessageRemoteClient reliableMessageRemoteClient;
+
+
     @Override
-    public long saveOrder(OrderInfo orderInfo, OrderProduct orderProduct, OrderSend orderSend) {
-
+    public long saveOrder(OrderInfo orderInfo, OrderProduct orderProduct, OrderSend orderSend) throws Throwable {
         this.save(orderInfo);
-
         return orderInfo.getOrderId();
     }
 
     @Transactional
     @Override
-    public long savePromoOrder(PromoDTO promoDTO) throws Throwable{
+    public long savePromoOrder(PromoDTO promoDTO) throws Throwable {
 
-            OrderInfo orderInfo = promoDTO.getOrderInfo();
+        OrderInfo orderInfo = promoDTO.getOrderInfo();
 
-            log.debug("订单号：" + orderInfo.getOrderId());
-            if (this.findById(orderInfo.getOrderId()) != null) {
-                log.debug("重复订单，ORDER_ID:" + orderInfo.getOrderId());
-                return orderInfo.getOrderId();
-            }
-            this.save(orderInfo);
-            long orderId = orderInfo.getOrderId();
-            //保存商品信息
-            OrderProduct orderProduct = promoDTO.getOrderProduct();
-            orderProduct.setOrderId(orderId);
-            orderProductService.save(orderProduct);
+        log.debug("订单号：" + orderInfo.getOrderId());
+        if (this.findById(orderInfo.getOrderId()) != null) {
+            log.debug("重复订单，ORDER_ID:" + orderInfo.getOrderId());
             return orderInfo.getOrderId();
+        }
+        this.save(orderInfo);
+        long orderId = orderInfo.getOrderId();
+        //保存商品信息
+        OrderProduct orderProduct = promoDTO.getOrderProduct();
+        orderProduct.setOrderId(orderId);
+        orderProductService.save(orderProduct);
+        reliableMessageRemoteClient.deleteMessageByBizId(orderId);
+        return orderInfo.getOrderId();
 
     }
 }

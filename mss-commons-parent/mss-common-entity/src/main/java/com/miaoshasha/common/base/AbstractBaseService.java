@@ -1,6 +1,7 @@
 package com.miaoshasha.common.base;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -20,6 +21,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<E>, E extends Bas
      * @param entity
      * @return 返回id
      */
+    @Transactional
     @Override
     public long save(E entity) {
         //若是AbstractBaseEntity 则记录时间
@@ -44,6 +46,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<E>, E extends Bas
      * @param entity
      * @return
      */
+    @Transactional
     @Override
     public int modify(E entity) {
         if(entity instanceof AbstractBaseEntity){
@@ -60,6 +63,7 @@ public abstract class AbstractBaseService<M extends BaseMapper<E>, E extends Bas
      * @param pid
      * @return
      */
+    @Transactional
     @Override
     public int removeById(Long pid) {
         return mapper.deleteByPrimaryKey(pid);

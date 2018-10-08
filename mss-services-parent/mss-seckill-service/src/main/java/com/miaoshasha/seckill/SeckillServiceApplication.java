@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
 @EnableRabbit
@@ -14,6 +15,9 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan("com.miaoshasha")
 @MapperScan(basePackages = "com.miaoshasha.seckill.mapper")
 @EnableEurekaClient
+@EnableFeignClients(basePackages = {
+		"com.miaoshasha.api.message"
+})
 public class SeckillServiceApplication {
 
 	public static void main(String[] args) {

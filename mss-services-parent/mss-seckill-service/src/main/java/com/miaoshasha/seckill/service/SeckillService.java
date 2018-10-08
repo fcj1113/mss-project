@@ -14,6 +14,4 @@ public interface SeckillService {
      */
     void doSecKill(PromoDTO promoDTO);
 
-    void testSeq();
-
 }

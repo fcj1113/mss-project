@@ -1,3 +1,10 @@
+##部署说明
+###运行环境
+>- JDK 1.8
+>- MYSQL 5.7+ 
+>- Redis 最新版
+>- Mongo 最新版
+
 ##项目结构
 ``` lua		
 mss-product

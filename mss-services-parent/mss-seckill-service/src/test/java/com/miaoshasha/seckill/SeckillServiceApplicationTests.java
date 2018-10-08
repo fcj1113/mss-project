@@ -96,8 +96,7 @@ public class SeckillServiceApplicationTests {
 
         for (int i = 0; i < 20; i++) {
             pool.execute(() -> {
-//                seckillService.doSecKill(promoDTO);
-                seckillService.testSeq();
+                seckillService.doSecKill(promoDTO);
             });
 
         }

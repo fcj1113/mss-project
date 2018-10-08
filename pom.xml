@@ -41,6 +41,7 @@
         <protobuf.version>3.5.1</protobuf.version>
         <hutool.version>4.1.1</hutool.version>
         <spring-boot-admin.version>1.5.7</spring-boot-admin.version>
+        <quartz.version>2.2.1</quartz.version>
     </properties>
 
     <!--公共依赖-->
@@ -172,6 +173,12 @@
                 <version>${spring-boot-admin.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>${quartz.version}</version>
             </dependency>
 
         </dependencies>
