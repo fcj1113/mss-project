@@ -2,6 +2,7 @@ package com.miaoshasha.seckill.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.miaoshasha.api.message.ReliableMessageRemoteClient;
+import com.miaoshasha.common.base.AbstractBaseService;
 import com.miaoshasha.common.dto.order.PromoDTO;
 import com.miaoshasha.common.entity.message.ReliableMessage;
 import com.miaoshasha.common.entity.store.PromoInfo;
@@ -70,6 +71,9 @@ public class SeckillServiceImpl implements SeckillService {
                 log.debug("新生成订单号：" + orderId);
                 promoDTO.getOrderInfo().setOrderId(orderId);
                 promoDTO.getOrderInfo().setOrderNo("DD" + orderId);
+
+                promoDTO.getOrderProduct().setOrderId(orderId);
+                promoDTO.getOrderSend().setOrderId(orderId);
                 //orderMsgPublisher.send(promoDTO);
                 ReliableMessage reliableMessage = createMessage(promoDTO);
 

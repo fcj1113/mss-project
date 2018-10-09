@@ -23,16 +23,16 @@ public class OrderInfo extends AbstractBaseEntity {
     /** 支付方式 1-货到付款，2-网银，3-支付宝，4-微信，5-充值卡抵扣（预留）*/
     private Integer payType;
 
-    /** 订单总价，单位元*/
+    /** 订单总价，单位分*/
     private Long totalAmount;
 
-    /** 抵扣金额*/
+    /** 抵扣金额，单位分*/
     private Long dedAmount;
 
-    /** 实际支付金额*/
+    /** 实际支付金额，单位分*/
     private Long payAmount;
 
-    /** 优惠金额*/
+    /** 优惠金额，单位分*/
     private Long discountAmount;
 
     /** 使用积分数量*/

@@ -1,25 +1,27 @@
-##部署说明
-###运行环境
+## 部署说明
+### 运行环境
 >- JDK 1.8
 >- MYSQL 5.7+ 
 >- Redis 最新版
 >- Mongo 最新版
 
-##项目结构
+## 项目结构
 ``` lua		
 mss-product
 ├── mss-api-client -- 服务调用的封装 
 ├── mss-commons-parent -- 公共模块 
 ├    ├── mss-common -- 业务公共组件
+├    ├── mss-common-api -- 公共对外开放的接口，controller和FeignClient同时实现，保证两边的代码一致
 ├    ├── mss-common-entity -- 公共实体
 ├    ├── mss-common-utils -- 工具
 ├── mss-modules-parent -- 微服务基础平台模块
 ├    ├── mss-auth-service -- 授权服务[9040]
 ├    ├── mss-eureka-service -- 注册中心[9001-9009]
 ├    ├── mss-gateway-service -- zuul网关[9010]，
-├    ├── mss-msgcenter-service -- 消息中心[9020]
-├    └── mss-logcenter-service -- 日志中心[9030]
-├── mss-services-parent  -- 微服务业务模块 
+├    ├── mss-logcenter-service -- 日志中心[9030]
+├    ├── mss-msgcenter-service -- 消息中心[9040]
+├    └── mss-msgcenter-task -- 分布式事物消息确认子系统[9041]
+├── mss-services-parent  -- 微服务业务模块 s
 ├    ├── mss-base-service -- 基础服务 [8001]
 ├    ├── mss-order-service -- 订单中心 [8002]
 ├    ├── mss-seckill-service -- 秒杀服务[8003]
@@ -49,7 +51,7 @@ mss-product
 >- 抢购秒杀：支持高并发抢购或秒杀，使用了基于redis的分布式锁，rabbitMq等等，可借助于网关进行限流；
 >- 分布式锁：基于redis的分布式锁，lua实现；
 >- 分布式ID：基于Snowflake算法实现分布式ID，已解决偶数偏多的问题；时间回拨引发的问题方案：记录最后生成id的毫秒时间，与当前生成时间判断，若相差小于10毫秒，等待后再生成，超过可换成新的workid；
->- 分布式事物：可靠消息最终一致性；
+>- 分布式事物：可靠消息最终一致性；TCC柔性事物待实现
 >- 基础服务：包括用户管理，菜单管理，角色管理，权限管理，数据字典等等
 >- 消息中心：短信、邮件  待实现...
 >- 任务调度：基于elastic-job的分布式任务 待实现...

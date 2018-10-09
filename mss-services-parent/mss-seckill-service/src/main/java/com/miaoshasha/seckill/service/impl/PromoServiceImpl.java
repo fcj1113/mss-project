@@ -1,5 +1,6 @@
 package com.miaoshasha.seckill.service.impl;
 
+import com.miaoshasha.common.base.AbstractBaseService;
 import com.miaoshasha.common.entity.store.PromoInfo;
 import com.miaoshasha.common.enums.ErrorCode;
 import com.miaoshasha.common.exception.SystemException;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by fengchaojun on 2018/6/14.
  */
 @Service
-public class PromoServiceImpl implements PromoService {
+public class PromoServiceImpl extends AbstractBaseService<PromoInfoMapper,PromoInfo> implements PromoService {
 
     private static final Logger logger = LoggerFactory.getLogger(PromoServiceImpl.class);
 
@@ -32,7 +33,6 @@ public class PromoServiceImpl implements PromoService {
 
     @Autowired
     private RedisCache redisCache;
-
 
     @Override
     public long save(PromoInfo promoInfo) {

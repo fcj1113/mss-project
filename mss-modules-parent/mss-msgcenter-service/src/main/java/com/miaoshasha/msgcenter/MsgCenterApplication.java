@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 消息中心服务
- * @author：fengchaojun <br/>
+ * @author fengchaojun <br/>
  * ===============================
  * Created with IDEA.
  * Date：2018-09-06
