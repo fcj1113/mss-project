@@ -50,8 +50,8 @@ public class SwaggerConfig {
         ParameterBuilder tokenBuilder = new ParameterBuilder();
         List<Parameter> parameterList = new ArrayList<Parameter>();
         tokenBuilder.name("Authorization")
-                .defaultValue("获取token")
-                .description("token")
+                .defaultValue("")
+                .description("获取的token")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
                 .required(true).build();
@@ -61,8 +61,8 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
-                .build()
-                .globalOperationParameters(parameterList);
+                .build();
+//                .globalOperationParameters(parameterList);
     }
 
     private ApiInfo apiInfo() {
