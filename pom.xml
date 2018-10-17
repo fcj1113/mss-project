@@ -42,6 +42,7 @@
         <hutool.version>4.1.1</hutool.version>
         <spring-boot-admin.version>1.5.7</spring-boot-admin.version>
         <quartz.version>2.2.1</quartz.version>
+        <reflections.version>0.9.11</reflections.version>
     </properties>
 
     <!--公共依赖-->
@@ -179,6 +180,13 @@
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
                 <version>${quartz.version}</version>
+            </dependency>
+
+            <!-- Reflections 依赖 Google 的 Guava 库和 Javassist 库。 -->
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${reflections.version}</version>
             </dependency>
 
         </dependencies>
