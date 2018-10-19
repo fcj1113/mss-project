@@ -43,6 +43,7 @@ mss-product
 >- ZUUL网关：实现动态路由，支持DB和redis的可配置化，支持网关日志，网关限流，网关鉴权
 >- 日志中心：记录服务日志和网关日志，系统日志接入ELK，使用rabbitMq；（访问量大时建议使用kafka）；日志加入sleuth的traceID信息，各服务通过logback配置记录到ELK；
 >- 服务限流：支持网关层的限流，包括服务和api配置化限流；支持单应用限流，注解模式；
+>- 负载均衡：服务端基于robbin客户端负载均衡；
 >- API文档：swagger各个模块的实现
 >- 缓存组件：基于Jedis封装的缓存组件，支持高可用，并对缓存穿透，缓存雪崩进行了高并发处理；
 >- 链路追踪：sleuth+zipkin的trace跟踪，数据保存ELK，Kibana图形化展示；
