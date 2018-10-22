@@ -45,7 +45,10 @@ public class CacheAspect {
      */
     public static final long timeout = 100;
 
-
+    /**
+     * 并发等待时的循环次数
+     */
+    public static final int loopTime = 5;
     private ReentrantLock reentrantLock = new ReentrantLock();
 
     /**
@@ -110,8 +113,8 @@ public class CacheAspect {
             //缓存为空时，执行目标方法，并把返回结果存储到缓存中
             return setCache(joinPoint, enableCache, key);
         } else {//加锁，防止高并发穿透导致雪崩、
-            if (counter.incrementAndGet() > 5) {
-                throw new RuntimeException("缓存并发错误");
+            if (counter.incrementAndGet() > loopTime) {
+                throw new RuntimeException("缓存并发超时错误");
             }
             CommandExecutor commandExecutor = new CommandLock().commandExecutor(key);
             resultObj = commandExecutor.run(new CommandCallBack<Object>() {
