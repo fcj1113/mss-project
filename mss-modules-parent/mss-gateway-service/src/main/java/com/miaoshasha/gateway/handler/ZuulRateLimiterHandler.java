@@ -8,6 +8,7 @@ import com.miaoshasha.gateway.entity.ZuulRateLimiterEntity;
 import com.miaoshasha.gateway.entity.ZuulRouteEntity;
 import com.miaoshasha.gateway.service.ZuulApiLimiterService;
 import com.miaoshasha.gateway.service.ZuulRouteService;
+import com.miaoshasha.redis.util.RedisCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class ZuulRateLimiterHandler {
     @Autowired
     private ZuulApiLimiterService zuulApiLimiterService;
 
+    @Autowired
+    private RedisCache redisCache;
+
     /**
      * id作为key
      */
@@ -57,9 +61,25 @@ public class ZuulRateLimiterHandler {
         if(baseLimiterEntity == null || !baseLimiterEntity.isLimiterEnabled()){
             return ;
         }
-        RateLimiter rateLimiter = baseLimiterEntity.rateLimiter();
-        if(rateLimiter.tryAcquire(baseLimiterEntity.getPermits(),baseLimiterEntity.getTimeout(),TimeUnit.valueOf(baseLimiterEntity.getTimeUnit()))){
-            return ;
+        boolean distributedEnabled = baseLimiterEntity.isDistributedEnabled();
+        if(distributedEnabled){//启用分布式限流，
+            /*
+            * 1.生成redis的key，规则：serviceId+限流方式（url，user，role，ip等等），默认是url
+            *
+            * 2.每次请求符合key的规则进行redis原子递增，把请求总数放在redis中（requestTotal）
+            *
+            * 3.第一次递增设置key的超时时间
+            *
+            * 4.Math.max(-1,limit-requestTotal)
+            * */
+
+
+        }else {
+            //单实例限流
+            RateLimiter rateLimiter = baseLimiterEntity.rateLimiter();
+            if (rateLimiter.tryAcquire(baseLimiterEntity.getPermits(), baseLimiterEntity.getTimeout(), TimeUnit.valueOf(baseLimiterEntity.getTimeUnit()))) {
+                return;
+            }
         }
         throw new SystemException(baseLimiterEntity.getErrorCode(),baseLimiterEntity.getErrorMsg());
     }

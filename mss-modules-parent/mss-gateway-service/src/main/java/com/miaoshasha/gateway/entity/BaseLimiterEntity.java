@@ -78,6 +78,11 @@ public class BaseLimiterEntity implements Serializable {
      */
     private Date updateTime;
 
+    /**
+     * 启用分布式限流，启用后通过redis进行限流操作
+     */
+    private boolean distributedEnabled;
+
     private RateLimiter rateLimiter;
 
     public RateLimiter rateLimiter() {
