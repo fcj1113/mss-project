@@ -2,6 +2,7 @@ package com.miaoshasha.gateway.entity;
 
 import com.google.common.util.concurrent.RateLimiter;
 import com.miaoshasha.common.enums.ErrorCode;
+import com.miaoshasha.gateway.support.RateLimitType;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -83,7 +84,21 @@ public class BaseLimiterEntity implements Serializable {
      */
     private boolean distributedEnabled;
 
-    private RateLimiter rateLimiter;
+    /**
+     * 限流时间内的许可数量
+     */
+    private long distributedPermits;
+
+    /**
+     * 限流时间
+     */
+    private long distributedTime;
+    /**
+     * 限流类型
+     */
+    private RateLimitType rateLimitType;
+
+    private volatile RateLimiter rateLimiter;
 
     public RateLimiter rateLimiter() {
         if (rateLimiter == null) {

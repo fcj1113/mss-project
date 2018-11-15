@@ -64,7 +64,7 @@ public class ZuulRateLimiterFilter extends ZuulFilter {
         String uri = request.getRequestURI();
 
         Route route = routeLocator.getMatchingRoute(uri);
-        zuulRateLimiterHandler.tryAcquire(route);
+        zuulRateLimiterHandler.tryAcquire(route,request);
         return null;
     }
 }

@@ -1,6 +1,7 @@
 package com.miaoshasha.gateway.support;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +15,7 @@ import static org.springframework.cloud.netflix.zuul.filters.support.FilterConst
  * Time：17:52
  * -----------------------------
  */
+@Component
 public class RateLimitUtils {
     private static final String ANONYMOUS_USER = "anonymous";
 
